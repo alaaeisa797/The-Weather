@@ -5,6 +5,7 @@ object MyConstants {
     const val MY_LANGYAGE_APP_KEY = "LANGUAGE"
     const val MY_SHARED_PREFERANCE = "mySharedPreference"
     const val MY_TEMP_UNIT = "unit"
+    const val MY_WIND_SPEED = "windSpeed"
 
 
 }

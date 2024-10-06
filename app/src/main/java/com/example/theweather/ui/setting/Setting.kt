@@ -44,6 +44,7 @@ class Setting : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val language = sharedPreferences.getString(MyConstants.MY_LANGYAGE_API_KEY,"en")
         val unit = sharedPreferences.getString(MyConstants.MY_TEMP_UNIT,"Celsius")
+        val windSpeed = sharedPreferences.getString(MyConstants.MY_WIND_SPEED,"Meter/Sec")
         when(language)
         {
             "ar"-> binding.rbArabic.isChecked = true
@@ -55,11 +56,16 @@ class Setting : Fragment() {
             "Fahrenheit"-> binding.rbFehrenhayt.isChecked = true
             "Celsius"-> binding.rbCelicious.isChecked = true
         }
+        when(windSpeed)
+        {
+           "Meter/Sec" ->binding.rbMeterSec.isChecked = true
+           "Mile/Hour" ->binding.rbMileHour.isChecked = true
+        }
         binding.rgLanguages.setOnCheckedChangeListener { groub, id ->
 
             val languageRadioButton: RadioButton = binding.root.findViewById(id) as RadioButton
             when (languageRadioButton.text) {
-                "Arabic" -> {
+                "عربي","Arabic" -> {
                     sharedPreferences.edit().putString(MyConstants.MY_LANGYAGE_API_KEY, "ar").apply()
                     Thread.sleep(1000)
                     changeAppLanguage("ar")
@@ -82,12 +88,12 @@ class Setting : Fragment() {
             Log.d("TAG", "onViewCreated: $unit")
             when (temperatuerRadioButton.text)
             {
-                "Kelvin"->{
+                "كلفن","Kelvin"->{
                     sharedPreferences.edit().putString(MyConstants.MY_TEMP_UNIT, "Kelvin").apply()
                     Thread.sleep(1000)
                     restartApp()
                 }
-                "Fahrenheit"->{
+                "فهرنهايت","Fahrenheit"->{
                     sharedPreferences.edit().putString(MyConstants.MY_TEMP_UNIT, "Fahrenheit").apply()
                     Thread.sleep(1000)
                     restartApp()
@@ -98,6 +104,24 @@ class Setting : Fragment() {
                     restartApp()
                 }
             }
+        }
+
+        binding.rgWindSpeed.setOnCheckedChangeListener{groub, id ->
+            val windSpeedRadioButton: RadioButton = binding.root.findViewById(id) as RadioButton
+            when (windSpeedRadioButton.text)
+            {
+                "Mile/Hour","ميل/ساعه"->{
+                    sharedPreferences.edit().putString(MyConstants.MY_WIND_SPEED, "Mile/Hour").apply()
+                    Thread.sleep(1000)
+                    restartApp()
+                }
+                else->{
+                    sharedPreferences.edit().putString(MyConstants.MY_WIND_SPEED, "Meter/Sec").apply()
+                    Thread.sleep(1000)
+                    restartApp()
+                }
+            }
+
         }
     }
 
@@ -123,6 +147,15 @@ class Setting : Fragment() {
             it.finish()
             startActivity(intent)
         }
+    }
+
+    fun restartFragment(fragment: Fragment) {
+        val fragmentManager = fragment.parentFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+
+        fragmentTransaction.detach(fragment)
+        fragmentTransaction.attach(fragment)
+        fragmentTransaction.commit()
     }
 
 

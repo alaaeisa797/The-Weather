@@ -1,5 +1,6 @@
 package com.example.theweather.ui.home.view_model
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.theweather.ApiState
@@ -38,6 +39,7 @@ class HomeViewModel (val repo : Reposatory) : ViewModel() {
             repo.getFiveDaysForecast(lat,long,language)
                 .catch {
                     mutableLiveDataForFiveDays.value = ApiState.Failure(it.toString())
+                    Log.d("TAG", "getfiveForecast: ${it.printStackTrace()}")
                 }.collect{
 
                     mutableLiveDataForFiveDays.value = ApiState.Success(it)

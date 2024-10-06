@@ -45,7 +45,6 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import org.intellij.lang.annotations.Language
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -62,6 +61,7 @@ class HomeFragment : Fragment() {
     lateinit var sharedPreferences: SharedPreferences
     lateinit var language: String
     lateinit var unit: String
+    lateinit var windSpeed: String
     var minTemp = Double.MAX_VALUE
     var maxTemp = Double.MIN_VALUE
 
@@ -82,6 +82,7 @@ class HomeFragment : Fragment() {
 
        language = sharedPreferences.getString(MyConstants.MY_LANGYAGE_API_KEY,"en")?:"en"
         unit = sharedPreferences.getString(MyConstants.MY_TEMP_UNIT,"Celsius")?:"Celsius"
+        windSpeed = sharedPreferences.getString(MyConstants.MY_WIND_SPEED,"Meter/Sec")?:"Meter/Sec"
 //            val indecator: String = HomeFragmentArgs.fromBundle(arguments).indecator
 //
 ////
@@ -270,6 +271,13 @@ class HomeFragment : Fragment() {
         when (language)
         {
             "ar"->{
+                when (windSpeed)
+                {
+                    "Mile/Hour"->{
+                        binding.tvWindSpeed.text = "${convertMeterPerSecToMilePerHour(result.wind.speed.toDouble())} ميل/ساعه "
+                    }
+                    else->{binding.tvWindSpeed.text = "${result.wind.speed} م/ث"}
+                }
                 // card 1
                 binding.tvTodayDisc.text = result.weather.get(0).description
                 val readable_location =
@@ -279,7 +287,7 @@ class HomeFragment : Fragment() {
 
         binding.tvPressure.text = "${result.main.pressure} ََض ج"
         binding.tvHumidity.text = "${result.main.humidity} %"
-        binding.tvWindSpeed.text = "${result.wind.speed} م/ث"
+
         binding.tvCloud.text = "${result.clouds.all} %"
         binding.tvFeelsLike.text = "${result.main.feels_like} ٍس "
         binding.tvVisability.text = "${result.visibility} م "
@@ -303,6 +311,14 @@ class HomeFragment : Fragment() {
             }
                 else -> // case language english
                     {
+                        when (windSpeed)
+                        {
+                            "Mile/Hour"->{
+
+                                binding.tvWindSpeed.text = "${convertMeterPerSecToMilePerHour(result.wind.speed.toDouble())} mile/h"
+                            }
+                            else->{ binding.tvWindSpeed.text = "${result.wind.speed} m/sec"}
+                        }
                         // card 1
 
                         binding.tvTodayDisc.text = result.weather.get(0).description
@@ -314,7 +330,8 @@ class HomeFragment : Fragment() {
                         //card 2
                         binding.tvPressure.text = "${result.main.pressure} hpa"
                         binding.tvHumidity.text = "${result.main.humidity} %"
-                        binding.tvWindSpeed.text = "${result.wind.speed} m/sec"
+
+
                         binding.tvCloud.text = "${result.clouds.all} %"
                         binding.tvVisability.text = "${result.visibility} m"
 
@@ -475,6 +492,11 @@ class HomeFragment : Fragment() {
     fun convertFromCelsiusToKelvin (temp :Double) :Int
     {
        return (temp+273.15).toInt()
+    }
+
+    fun convertMeterPerSecToMilePerHour (m : Double ):Int
+    {
+        return (m*2.23694).toInt()
     }
 
 }
