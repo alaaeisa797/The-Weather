@@ -1,0 +1,41 @@
+<resources>
+    <string name="app_name">TheWeather</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_setting">Settins</string>
+    <string name="menu_alarm">Alarm</string>
+    <string name="menu_favourite">Favourite</string>
+    <string name="pressure">Pressure</string>
+    <string name="humidity">Humidity</string>
+    <string name="windSpeed">Wind</string>
+    <string name="cloud">Cloud</string>
+    <string name="feelsLike">Feels Like</string>
+    <string name="visability">Visability</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="btn_insrtFavLocation">Add</string>
+    <string name="fav_fragment">Favourite</string>
+    <string name="map_favourite">Map</string>
+    <string name="tv_lang">Language</string>
+    <string name="rb_arabic">Arabic</string>
+    <string name="tv_locations">Location</string>
+    <string name="rb_gps">GPS</string>
+    <string name="rb_map">Map</string>
+    <string name="rb_english">English</string>
+    <string name="tv_temperature">Temperature</string>
+    <string name="rb_celsius">Celsius</string>
+    <string name="rb_kelvin">Kelvin</string>
+    <string name="rb_fahrenheit">Fahrenheit</string>
+    <string name="tv_windSpeed">"Wind Speed "</string>
+    <string name="rb_mSec">Meter/Sec</string>
+    <string name="rb_milehour">Mile/Hour</string>
+    <string name="tv_notification">Notification</string>
+    <string name="rb_enable">Enable</string>
+    <string name="rb_disable">Disable</string>
+</resources>

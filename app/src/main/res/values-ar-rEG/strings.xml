@@ -1,0 +1,41 @@
+<resources>
+    <string name="app_name">الطقس</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">الاعدادت</string>
+
+    <string name="menu_home">الرئيسيه</string>
+    <string name="menu_setting">الاعدادت</string>
+    <string name="menu_alarm">المنبه</string>
+    <string name="menu_favourite">المفضله</string>
+    <string name="pressure">ضغط جوي</string>
+    <string name="humidity">الرطوبه</string>
+    <string name="windSpeed">سرعه الرياح</string>
+    <string name="cloud">السحب</string>
+    <string name="feelsLike">تبدو كأنها</string>
+    <string name="visability">الرؤيه</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="btn_insrtFavLocation">اضافه</string>
+    <string name="fav_fragment">المفضله</string>
+    <string name="map_favourite">خريطه</string>
+    <string name="tv_lang">اللغه</string>
+    <string name="rb_arabic">عربي</string>
+    <string name="tv_locations"> طريقه تحديد الموقع</string>
+    <string name="rb_gps">الموقع الحالي</string>
+    <string name="rb_map">خريطه</string>
+    <string name="rb_english">اللغه الانجليزيه</string>
+    <string name="tv_temperature">درجه الحراره</string>
+    <string name="rb_celsius">سلزيوس</string>
+    <string name="rb_kelvin">كلفن</string>
+    <string name="rb_fahrenheit">فهرنهايت</string>
+    <string name="tv_windSpeed">" وحده قياس سرعه الرياح "</string>
+    <string name="rb_mSec">م/ثانيه</string>
+    <string name="rb_milehour">ميل/ساعه</string>
+    <string name="tv_notification">الاشعارات</string>
+    <string name="rb_enable">تفعيل</string>
+    <string name="rb_disable">تعطيل</string>
+</resources>
