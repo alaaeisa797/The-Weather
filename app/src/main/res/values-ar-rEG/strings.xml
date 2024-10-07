@@ -38,4 +38,5 @@
     <string name="tv_notification">الاشعارات</string>
     <string name="rb_enable">تفعيل</string>
     <string name="rb_disable">تعطيل</string>
+    <string name="btn_mapSetting">تحديد</string>
 </resources>

@@ -38,4 +38,6 @@
     <string name="tv_notification">Notification</string>
     <string name="rb_enable">Enable</string>
     <string name="rb_disable">Disable</string>
+
+    <string name="btn_mapSetting">Select</string>
 </resources>

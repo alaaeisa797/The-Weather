@@ -65,12 +65,12 @@ class Setting : Fragment() {
            "Meter/Sec" ->binding.rbMeterSec.isChecked = true
            "Mile/Hour" ->binding.rbMileHour.isChecked = true
         }
-        when(mapOrGps)
-        {
-            "gpsIsClicked"-> binding.rbGps.isChecked = true
-            "mapIsClicked"->binding.rbMap.isChecked= true
-
-        }
+//        when(mapOrGps)
+//        {
+//            "gpsIsClicked"-> binding.rbGps.isChecked = true
+//            "mapIsClicked"->binding.rbMap.isChecked= true
+//
+//        }
         binding.rgLanguages.setOnCheckedChangeListener { groub, id ->
 
             val languageRadioButton: RadioButton = binding.root.findViewById(id) as RadioButton
@@ -141,6 +141,8 @@ class Setting : Fragment() {
                         // hena ha2olo ro7 el map
                     sharedPreferences.edit().putString(MyConstants.MY_LOCATION_WAY, "Map").apply()
                     SharedPrefToDetectdWayOfLocationing.edit().putString("map||gps","gpsIsClicked").apply()
+                    val action = SettingDirections.actionNavSettingToSettingMapFragment()
+                   Navigation.findNavController(binding.root).navigate(action)
                 }
                 else->{
                     sharedPreferences.edit().putString(MyConstants.MY_LOCATION_WAY, "GPS").apply()

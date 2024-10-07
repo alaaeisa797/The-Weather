@@ -120,6 +120,12 @@ class HomeFragment : Fragment() {
             }
         else if(LocationWay.startsWith("Map"))
         {
+            Log.d("TAG", "onStart: da el location way case FavScreen ${LocationWay} ")
+            var latLong =LocationWay.split(",")
+            var lat = latLong.get(1).toDouble()
+            var long= latLong.get(2).toDouble()
+
+            getSpecificLocation(lat,long,language)
 
         }
         else if (LocationWay.startsWith("FavScreen"))
