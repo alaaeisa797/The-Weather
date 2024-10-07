@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.theweather.DiffUtil
 import com.example.theweather.MyConstants
+import com.example.theweather.R
 import com.example.theweather.databinding.TestItemBinding
 import com.example.theweather.databinding.WeeklyForecastBinding
 import com.example.theweather.model.ForecastItem
@@ -86,10 +87,12 @@ class WeeklyTempAdapter : ListAdapter<ForecastItem, WeeklyTempAdapter.WeeklyTemp
           // holder.binding.temperatureMinMax.text = "${currentForecast.main.temp_max}/${currentForecast.main.temp_min}"
           // holder.binding.tvMinT .text = currentForecast.main.temp_min .toString()
 
-        val conditionImageUrl = "https://openweathermap.org/img/wn/${currentForecast.weather[0].icon}.png"
-        Glide.with(holder.itemView.context)
-            .load(conditionImageUrl)
-            .into(holder.binding.weatherIcon)
+//        val conditionImageUrl = "https://openweathermap.org/img/wn/${currentForecast.weather[0].icon}.png"
+//        Glide.with(holder.itemView.context)
+//            .load(conditionImageUrl)
+//            .into(holder.binding.weatherIcon)
+
+        binding.weatherIcon .setImageResource(getIcon(currentForecast.weather.get(0).icon))
 
     }
 
@@ -107,5 +110,30 @@ class WeeklyTempAdapter : ListAdapter<ForecastItem, WeeklyTempAdapter.WeeklyTemp
     fun convertFromCelsiusToKelvin (temp :Double) :Int
     {
         return (temp+273.15).toInt()
+    }
+    private fun getIcon(icon: String): Int {
+        val iconValue: Int
+        when (icon) {
+            "01d" -> iconValue = R.drawable.clearsky
+            "01n" -> iconValue = R.drawable.clearsky
+            "02d" -> iconValue = R.drawable.clouds
+            "02n" -> iconValue = R.drawable.clouds
+            "03n" -> iconValue = R.drawable.clouds
+            "03d" -> iconValue = R.drawable.clouds
+            "04d" -> iconValue = R.drawable.clouds
+            "04n" -> iconValue = R.drawable.clouds
+            "09d" -> iconValue = R.drawable.rain
+            "09n" -> iconValue = R.drawable.rain
+            "10d" -> iconValue = R.drawable.rain
+            "10n" -> iconValue = R.drawable.rain
+            "11d" -> iconValue = R.drawable.storm
+            "11n" -> iconValue = R.drawable.storm
+            "13d" -> iconValue = R.drawable.snow
+            "13n" -> iconValue = R.drawable.snow
+            "50d" -> iconValue = R.drawable.mist
+            "50n" -> iconValue = R.drawable.mist
+            else -> iconValue = R.drawable.clearsky
+        }
+        return iconValue
     }
 }

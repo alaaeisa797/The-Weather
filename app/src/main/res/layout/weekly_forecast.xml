@@ -33,6 +33,7 @@
                 android:id="@+id/tv_d"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/f1"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_c"
                 app:layout_constraintEnd_toStartOf="@+id/tv_c"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -46,6 +47,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/tv_maxT"
                 app:layout_constraintEnd_toStartOf="@+id/tv_maxT"
                 app:layout_constraintHorizontal_bias="0.5"
+                android:fontFamily="@font/f1"
                 app:layout_constraintStart_toEndOf="@+id/tv_d"
                 app:layout_constraintTop_toTopOf="@+id/tv_maxT" />
 
@@ -53,6 +55,7 @@
                 android:id="@+id/tv_maxT"
                 android:layout_width="6dp"
                 android:layout_height="13dp"
+                android:fontFamily="@font/f1"
                 app:layout_constraintBottom_toBottomOf="@+id/imageVi"
                 app:layout_constraintEnd_toStartOf="@+id/imageVi"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -64,6 +67,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:fontFamily="@font/f1"
                 app:layout_constraintEnd_toEndOf="@+id/tv_maxT"
                 app:layout_constraintStart_toStartOf="@+id/tv_maxT"
                 app:layout_constraintTop_toBottomOf="@+id/tv_maxT" />

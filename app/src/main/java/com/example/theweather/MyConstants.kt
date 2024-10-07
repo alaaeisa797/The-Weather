@@ -6,6 +6,7 @@ object MyConstants {
     const val MY_SHARED_PREFERANCE = "mySharedPreference"
     const val MY_TEMP_UNIT = "unit"
     const val MY_WIND_SPEED = "windSpeed"
+    const val MY_LOCATION_WAY = "location"
 
 
 }

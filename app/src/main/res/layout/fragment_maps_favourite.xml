@@ -21,6 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
         android:text="@string/btn_insrtFavLocation"
+        android:fontFamily="@font/f1"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/map"
         app:layout_constraintEnd_toEndOf="parent"

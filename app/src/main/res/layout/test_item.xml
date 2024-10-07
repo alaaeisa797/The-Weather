@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"
-
+        android:fontFamily="@font/f1"
         android:text=""
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -22,7 +22,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" /> <!-- Adjusted margin to create more space -->
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/weather_icon"
         android:layout_width="48dp"
         android:layout_height="48dp"
@@ -39,7 +39,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-
+        android:fontFamily="@font/f1"
         android:layout_marginEnd="16dp"
         android:text="Clear sky"
         android:textSize="14sp"
@@ -54,7 +54,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-
+        android:fontFamily="@font/f1"
         android:text="23 / 13°C"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"

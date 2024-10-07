@@ -9,6 +9,7 @@
         android:id="@+id/nav_home"
         android:name="com.example.theweather.ui.home.view.HomeFragment"
         android:label="@string/menu_home"
+        android:fontFamily="@font/f1"
         tools:layout="@layout/fragment_home" >
         <argument
             android:name="myFullLocationInfo"
@@ -20,17 +21,24 @@
         android:id="@+id/nav_setting"
         android:name="com.example.theweather.ui.setting.Setting"
         android:label="@string/menu_setting"
-        tools:layout="@layout/fragment_setting" />
+        android:fontFamily="@font/f1"
+        tools:layout="@layout/fragment_setting" >
+        <action
+            android:id="@+id/action_nav_setting_to_nav_home"
+            app:destination="@id/nav_home" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_alarm"
         android:name="com.example.theweather.ui.slideshow.SlideshowFragment"
         android:label="@string/menu_alarm"
+        android:fontFamily="@font/f1"
         tools:layout="@layout/fragment_slideshow" />
     <fragment
         android:id="@+id/nav_favourite"
         android:name="com.example.theweather.favourite.view.FavouriteFragment"
         android:label="@string/fav_fragment"
+        android:fontFamily="@font/f1"
         tools:layout="@layout/fragment_favourite">
         <action
             android:id="@+id/action_nav_favourite_to_mapsFavouriteFragment"
@@ -43,6 +51,7 @@
         android:id="@+id/mapsFavouriteFragment"
         android:name="com.example.theweather.favourite.view.MapsFavouriteFragment"
         android:label="@string/map_favourite"
+        android:fontFamily="@font/f1"
         tools:layout="@layout/fragment_maps_favourite">
         <action
             android:id="@+id/action_mapsFavouriteFragment_to_nav_favourite"

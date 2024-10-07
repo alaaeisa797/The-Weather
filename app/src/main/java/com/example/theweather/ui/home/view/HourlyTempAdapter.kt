@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.theweather.DiffUtil
 import com.example.theweather.MyConstants
+import com.example.theweather.R
 import com.example.theweather.databinding.CurrentDayHourItemBinding
 import com.example.theweather.model.ForecastItem
 import java.text.SimpleDateFormat
@@ -75,10 +76,12 @@ class HourlyTempAdapter :ListAdapter<ForecastItem,HourlyTempAdapter.HourlyTempVi
         holder.binding .tvHourly.text =  convertTo12HourTime(currentHourlyTempAdapter.dt_txt.toString())
        // heya de  holder.binding .tvHourlyTemp .text = currentHourlyTempAdapter.main.temp.toString()
 
-        val conditionImageUrl = "https://openweathermap.org/img/wn/${currentHourlyTempAdapter.weather[0].icon}.png"
-        Glide.with(holder.itemView.context)
-            .load(conditionImageUrl)
-            .into(holder.binding.ivTempPic)
+//        val conditionImageUrl = "https://openweathermap.org/img/wn/${currentHourlyTempAdapter.weather[0].icon}.png"
+//        Glide.with(holder.itemView.context)
+//            .load(conditionImageUrl)
+//            .into(holder.binding.ivTempPic)
+
+        binding.ivTempPic.setImageResource(getIcon(currentHourlyTempAdapter.weather.get(0).icon))
 
 
     }
@@ -97,40 +100,31 @@ class HourlyTempAdapter :ListAdapter<ForecastItem,HourlyTempAdapter.HourlyTempVi
     {
         return (temp+273.15).toInt()
     }
-    fun settempBasedOnUnitAndLanguage(language : String, unit:String )
-    {
-        when (language)
-        {
-            "ar"->{
-                when(unit)
-                {
-                    "Fahrenheit"->{
 
-                    }
-                    "Kelvin"->{
-
-                    }
-                    else->{
-
-                    }
-                }
-            }
-            else->{
-                when(unit)
-                {
-                    "Fahrenheit"->{
-
-                    }
-                    "Kelvin"->{
-
-                    }
-                    else->{
-
-                    }
-                }
-            }
+    private fun getIcon(icon: String): Int {
+        val iconValue: Int
+        when (icon) {
+            "01d" -> iconValue = R.drawable.clearsky
+            "01n" -> iconValue = R.drawable.clearsky
+            "02d" -> iconValue = R.drawable.clouds
+            "02n" -> iconValue = R.drawable.clouds
+            "03n" -> iconValue = R.drawable.clouds
+            "03d" -> iconValue = R.drawable.clouds
+            "04d" -> iconValue = R.drawable.clouds
+            "04n" -> iconValue = R.drawable.clouds
+            "09d" -> iconValue = R.drawable.rain
+            "09n" -> iconValue = R.drawable.rain
+            "10d" -> iconValue = R.drawable.rain
+            "10n" -> iconValue = R.drawable.rain
+            "11d" -> iconValue = R.drawable.storm
+            "11n" -> iconValue = R.drawable.storm
+            "13d" -> iconValue = R.drawable.snow
+            "13n" -> iconValue = R.drawable.snow
+            "50d" -> iconValue = R.drawable.mist
+            "50n" -> iconValue = R.drawable.mist
+            else -> iconValue = R.drawable.clearsky
         }
-
+        return iconValue
     }
 
 }

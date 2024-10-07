@@ -9,6 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#CD588B9A"
         android:orientation="vertical">
 
 
@@ -23,7 +24,8 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:background="#469597">
 
                 <TextView
                     android:id="@+id/tv_location"
@@ -31,6 +33,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
+                    android:fontFamily="@font/f1"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -39,6 +42,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    android:fontFamily="@font/f1"
                     app:layout_constraintStart_toStartOf="@+id/tv_TodayDisc"
                     app:layout_constraintTop_toBottomOf="@+id/tv_TodayDisc" />
 
@@ -47,20 +51,22 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    android:fontFamily="@font/f1"
                     app:layout_constraintStart_toStartOf="@+id/tv_location"
                     app:layout_constraintTop_toBottomOf="@+id/tv_location" />
 
-                <ImageView
+                <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/iv_toDayWeatherConditionImage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
                     android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginEnd="16dp"
                     android:layout_marginBottom="8dp"
+                    android:background="#469597"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="1.0"
+                    app:layout_constraintVertical_bias="0.393"
                     tools:src="@tools:sample/avatars" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
@@ -85,13 +91,15 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="350dp">
+                android:layout_height="350dp"
+                android:background="#469597">
 
                 <TextView
                     android:id="@+id/tv_pressure"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="18dp"
+                    android:fontFamily="@font/f1"
                     app:layout_constraintEnd_toEndOf="@+id/imageView7"
                     app:layout_constraintStart_toStartOf="@+id/imageView7"
                     app:layout_constraintTop_toBottomOf="@+id/imageView7" />
@@ -111,6 +119,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
+                    android:fontFamily="@font/f1"
                     android:text="@string/pressure"
                     app:layout_constraintEnd_toEndOf="@+id/tv_pressure"
                     app:layout_constraintStart_toStartOf="@+id/tv_pressure"
@@ -131,6 +140,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
+                    android:fontFamily="@font/f1"
                     android:text="@string/windSpeed"
                     app:layout_constraintEnd_toEndOf="@+id/tv_windSpeed"
                     app:layout_constraintStart_toStartOf="@+id/tv_windSpeed"
@@ -141,6 +151,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="18dp"
+                    android:fontFamily="@font/f1"
                     app:layout_constraintEnd_toEndOf="@+id/imageView8"
                     app:layout_constraintStart_toStartOf="@+id/imageView8"
                     app:layout_constraintTop_toBottomOf="@+id/imageView8" />
@@ -160,6 +171,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
+                    android:fontFamily="@font/f1"
                     android:text="@string/humidity"
                     app:layout_constraintEnd_toEndOf="@+id/tv_humidity"
                     app:layout_constraintStart_toStartOf="@+id/tv_humidity"
@@ -170,6 +182,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="18dp"
+                    android:fontFamily="@font/f1"
                     app:layout_constraintEnd_toEndOf="@+id/imageView9"
                     app:layout_constraintStart_toStartOf="@+id/imageView9"
                     app:layout_constraintTop_toBottomOf="@+id/imageView9" />
@@ -189,6 +202,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="18dp"
+                    android:fontFamily="@font/f1"
                     app:layout_constraintEnd_toEndOf="@+id/imageView10"
                     app:layout_constraintStart_toStartOf="@+id/imageView10"
                     app:layout_constraintTop_toBottomOf="@+id/imageView10" />
@@ -198,6 +212,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
+                    android:fontFamily="@font/f1"
                     android:text="@string/cloud"
                     app:layout_constraintEnd_toEndOf="@+id/imageView10"
                     app:layout_constraintStart_toStartOf="@+id/imageView10"
@@ -228,6 +243,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="18dp"
+                    android:fontFamily="@font/f1"
                     app:layout_constraintEnd_toEndOf="@+id/imageView11"
                     app:layout_constraintStart_toStartOf="@+id/imageView11"
                     app:layout_constraintTop_toBottomOf="@+id/imageView11" />
@@ -237,6 +253,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
+                    android:fontFamily="@font/f1"
                     android:text="@string/feelsLike"
                     app:layout_constraintEnd_toEndOf="@+id/tv_feelsLike"
                     app:layout_constraintStart_toStartOf="@+id/tv_feelsLike"
@@ -247,6 +264,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="18dp"
+                    android:fontFamily="@font/f1"
                     app:layout_constraintEnd_toEndOf="@+id/imageView12"
                     app:layout_constraintStart_toStartOf="@+id/imageView12"
                     app:layout_constraintTop_toBottomOf="@+id/imageView12" />
@@ -256,6 +274,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
+                    android:fontFamily="@font/f1"
                     android:text="@string/visability"
                     app:layout_constraintEnd_toEndOf="@+id/tv_visability"
                     app:layout_constraintStart_toStartOf="@+id/tv_visability"

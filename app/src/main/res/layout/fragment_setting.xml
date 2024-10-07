@@ -8,7 +8,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="#CD588B9A">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -36,6 +37,7 @@
                             android:layout_height="wrap_content"
                             android:background="#03A9F4"
                             android:backgroundTint="#03A9F4"
+                            android:fontFamily="@font/f1"
                             android:padding="8dp"
                             android:text="@string/tv_lang"
                             android:textColor="#000000" />
@@ -55,12 +57,14 @@
                                 android:id="@+id/rb_arabic"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:fontFamily="@font/f1"
                                 android:text="@string/rb_arabic" />
 
                             <RadioButton
                                 android:id="@+id/rb_english"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:fontFamily="@font/f1"
                                 android:text="@string/rb_english" />
                         </RadioGroup>
 
@@ -87,6 +91,7 @@
                             android:layout_height="wrap_content"
                             android:background="#03A9F4"
                             android:backgroundTint="#03A9F4"
+                            android:fontFamily="@font/f1"
                             android:padding="8dp"
                             android:text="@string/tv_locations"
                             android:textColor="#000000" />
@@ -106,12 +111,14 @@
                                 android:id="@+id/rb_gps"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:fontFamily="@font/f1"
                                 android:text="@string/rb_gps" />
 
                             <RadioButton
                                 android:id="@+id/rb_map"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:fontFamily="@font/f1"
                                 android:text="@string/rb_map" />
                         </RadioGroup>
 
@@ -138,6 +145,7 @@
                             android:layout_height="wrap_content"
                             android:background="#03A9F4"
                             android:backgroundTint="#03A9F4"
+                            android:fontFamily="@font/f1"
                             android:padding="8dp"
                             android:text="@string/tv_temperature"
                             android:textColor="#000000" />
@@ -157,18 +165,21 @@
                                 android:id="@+id/rb_celicious"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:fontFamily="@font/f1"
                                 android:text="@string/rb_celsius" />
 
                             <RadioButton
                                 android:id="@+id/rb_kelvin"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:fontFamily="@font/f1"
                                 android:text="@string/rb_kelvin" />
 
                             <RadioButton
                                 android:id="@+id/rb_fehrenhayt"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:fontFamily="@font/f1"
                                 android:text="@string/rb_fahrenheit" />
                         </RadioGroup>
 
@@ -195,6 +206,7 @@
                             android:layout_height="wrap_content"
                             android:background="#03A9F4"
                             android:backgroundTint="#03A9F4"
+                            android:fontFamily="@font/f1"
                             android:padding="8dp"
                             android:text="@string/tv_windSpeed"
                             android:textColor="#000000" />
@@ -206,20 +218,22 @@
                             android:background="?android:attr/listDivider" />
 
                         <RadioGroup
+                            android:id="@+id/rg_windSpeed"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/rg_windSpeed">
+                            android:layout_height="wrap_content">
 
                             <RadioButton
                                 android:id="@+id/rb_meterSec"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:fontFamily="@font/f1"
                                 android:text="@string/rb_mSec" />
 
                             <RadioButton
                                 android:id="@+id/rb_mileHour"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:fontFamily="@font/f1"
                                 android:text="@string/rb_milehour" />
                         </RadioGroup>
 
@@ -246,6 +260,7 @@
                             android:layout_height="wrap_content"
                             android:background="#03A9F4"
                             android:backgroundTint="#03A9F4"
+                            android:fontFamily="@font/f1"
                             android:padding="8dp"
                             android:text="@string/tv_notification"
                             android:textColor="#000000" />
@@ -257,20 +272,22 @@
                             android:background="?android:attr/listDivider" />
 
                         <RadioGroup
+                            android:id="@+id/rg_notofications"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/rg_notofications">
+                            android:layout_height="wrap_content">
 
                             <RadioButton
                                 android:id="@+id/rb_enableNotofication"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:fontFamily="@font/f1"
                                 android:text="@string/rb_enable" />
 
                             <RadioButton
                                 android:id="@+id/rb_disableNotofication"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:fontFamily="@font/f1"
                                 android:text="@string/rb_disable" />
                         </RadioGroup>
 

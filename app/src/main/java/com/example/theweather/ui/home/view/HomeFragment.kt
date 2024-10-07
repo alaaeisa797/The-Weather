@@ -24,6 +24,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.theweather.ApiState
 import com.example.theweather.MyConstants
+import com.example.theweather.R
 
 import com.example.theweather.databinding.FragmentHomeBinding
 import com.example.theweather.db.FavouriteLocationsLocalDataSource
@@ -59,9 +60,11 @@ class HomeFragment : Fragment() {
     lateinit var hourlyTempAdapter: HourlyTempAdapter
     lateinit var weekluTempAdapter: WeeklyTempAdapter
     lateinit var sharedPreferences: SharedPreferences
+
     lateinit var language: String
     lateinit var unit: String
     lateinit var windSpeed: String
+    lateinit var LocationWay: String
     var minTemp = Double.MAX_VALUE
     var maxTemp = Double.MIN_VALUE
 
@@ -80,9 +83,13 @@ class HomeFragment : Fragment() {
        // language= "ar"
         sharedPreferences = requireActivity().getSharedPreferences(MyConstants.MY_SHARED_PREFERANCE,Context.MODE_PRIVATE)
 
+
        language = sharedPreferences.getString(MyConstants.MY_LANGYAGE_API_KEY,"en")?:"en"
         unit = sharedPreferences.getString(MyConstants.MY_TEMP_UNIT,"Celsius")?:"Celsius"
         windSpeed = sharedPreferences.getString(MyConstants.MY_WIND_SPEED,"Meter/Sec")?:"Meter/Sec"
+
+        LocationWay = sharedPreferences.getString(MyConstants.MY_LOCATION_WAY,"GPS")?:"GPS"
+        Log.d("TAG", "onStart: da el location way bara 5ales ${LocationWay} ")
 //            val indecator: String = HomeFragmentArgs.fromBundle(arguments).indecator
 //
 ////
@@ -94,29 +101,9 @@ class HomeFragment : Fragment() {
 //        Log.d("TAG", "onStart:  latitude $latitude")
 //        Log.d("TAG", "onStart:  longtude $longitude")
 
-        val argument: MutableList<String> = MutableList(3) { "" }
-
-        if (!requireArguments().isEmpty) {
-            val myArgument = HomeFragmentArgs.fromBundle(requireArguments()).myFullLocationInfo.split(",")
-// check 3al size 3shan ana bb3at null k default VALUE
-            if (myArgument.size ==3) {
-                argument[0] = myArgument[0]
-                argument[1] = myArgument[1]
-                argument[2] = myArgument[2]
-            } else {
-                Log.e("TAG", "Invalid latLong format, expected 3 parts but got ${myArgument.size}")
-            }
-        }
-        val indecator = argument[0]
-        val latitude = argument[1]
-        val longitude = argument[2]
-
-
-        when (indecator) {
-            // lw ana gay lel home mn el favFragment >> m3aya args ya3ni
-            "FavLocation" -> { getSpecificLocation(latitude.toDouble(), longitude.toDouble(),language) }
-// case enni lessa bade2 el app
-            else -> {
+        if (LocationWay.startsWith("GPS"))
+            {
+                Log.d("TAG", "onStart: da el location way fel case GPS ${LocationWay} ")
                 if (checkSelfPermission()) {
                     Log.d("TAG", "onStart: checkSelfPermission")
                     if (isLocationEnabled()) {
@@ -124,12 +111,131 @@ class HomeFragment : Fragment() {
                     } else {
                         enableLocationServices()
                     }
-                } else {
+                } else
+                {
                     Log.d("TAG", "onStart: requestPermission")
                     requestPermission()
                 }
+
             }
+        else if(LocationWay.startsWith("Map"))
+        {
+
         }
+        else if (LocationWay.startsWith("FavScreen"))
+            {
+                Log.d("TAG", "onStart: da el location way case FavScreen ${LocationWay} ")
+                  var latLong =LocationWay.split(",")
+                var lat = latLong.get(1).toDouble()
+                var long= latLong.get(2).toDouble()
+
+                getSpecificLocation(lat,long,language)
+            }
+        else {
+            if (checkSelfPermission()) {
+                Log.d("TAG", "onStart: checkSelfPermission")
+                if (isLocationEnabled()) {
+                    getFreshLocation()
+                } else {
+                    enableLocationServices()
+                }
+            } else
+            {
+                Log.d("TAG", "onStart: requestPermission")
+                requestPermission()
+            }
+
+        }
+
+
+
+//
+//        val argument: MutableList<String> = MutableList(3) { "" }
+//
+//        val isCommingFromWhichScreen = sharedPreferences.getString("ScreenIndecator","false") // its value is {"FavScreen,lat,long",""}
+//
+//        when (isCommingFromWhichScreen)
+//        {
+//            "Favscreen "-> {
+//                // 1- check argument not empty
+//                if (!requireArguments().isEmpty) {
+//                    val myArgument = HomeFragmentArgs.fromBundle(requireArguments()).myFullLocationInfo.split(",")
+//// check 3al size 3shan ana bb3at null k default VALUE
+//                    if (myArgument.size ==3) {
+//                        argument[0] = myArgument[0]
+//                        argument[1] = myArgument[1]
+//                        argument[2] = myArgument[2]
+//                        val indecator = argument[0]
+//                        val latitude = argument[1]
+//                        val longitude = argument[2]
+//                        getSpecificLocation(latitude.toDouble(), longitude.toDouble(),language)
+//                    } else {
+//                        // keda msh m3aya arguments 8er el "null" elli heya def value
+//                        Log.e("TAG", "Invalid latLong format, expected 3 parts but got ${myArgument.size}")
+//                    }
+//                }
+//                else// case en ana empty b2a ka argument
+//                // hena b2a laze, el shared preferece ykon m3ah el location elli dost 3leh fel favourite screen
+//                {
+//                    // hena homa empty wna lessa gay mel favourite screen
+//
+//                }
+//
+//
+//            }
+//            "MapSetting"->
+//                {
+//
+//                }
+//            else ->{// na kda hbda2 ell app w mkansh 3ndi ay location mt5azzzen abl keda AW GAY MEL MapGPS
+//
+//            }
+//
+//        }
+//
+//
+//
+//        if (!requireArguments().isEmpty) {
+//            val myArgument = HomeFragmentArgs.fromBundle(requireArguments()).myFullLocationInfo.split(",")
+//// check 3al size 3shan ana bb3at null k default VALUE
+//            if (myArgument.size ==3) {
+//                argument[0] = myArgument[0]
+//                argument[1] = myArgument[1]
+//                argument[2] = myArgument[2]
+//            } else {
+//                Log.e("TAG", "Invalid latLong format, expected 3 parts but got ${myArgument.size}")
+//            }
+//        }
+//        val indecator = argument[0]
+//        val latitude = argument[1]
+//        val longitude = argument[2]
+//
+//
+//        when (indecator) {
+//            // lw ana gay lel home mn el favFragment >> m3aya args ya3ni
+//            ,"FavLocation" -> {
+//                // el mafrod hena a3ml shared pref gdeda a7ot feha el location 3shan lw gay mel favScreen
+//                // w ro7t ba3dha lel setting yrga3 tani 3la nafs el location elli ana gaylo mel faavourite
+//                getSpecificLocation(latitude.toDouble(), longitude.toDouble(),language)
+//
+//            }
+//             // case enni lessa bade2 el app
+//            else -> {
+//                //
+//                if (checkSelfPermission()) {
+//                    Log.d("TAG", "onStart: checkSelfPermission")
+//                    if (isLocationEnabled()) {
+//                        getFreshLocation()
+//                    } else {
+//                        enableLocationServices()
+//                    }
+//                } else
+//                {
+//                    Log.d("TAG", "onStart: requestPermission")
+//                    requestPermission()
+//                }
+//            }
+//        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -160,8 +266,6 @@ class HomeFragment : Fragment() {
         }
         observOnCurrentDayForecast()
         onserveOnDailyForecast()
-
-
     }
     fun onserveOnDailyForecast ()
     {
@@ -325,6 +429,7 @@ class HomeFragment : Fragment() {
                         val readable_location =
                             getReadableLocation(result.coord.lat, result.coord.lon)
                         binding.tvLocation.text = readable_location
+                        binding.ivToDayWeatherConditionImage.setImageResource(getIcon(result.weather.get(0).icon))
                         // Log.d("TAG", "onCreateView: el readable location ${readable_location?.get(0)?.getAddressLine(0).toString()}")
 
                         //card 2
@@ -398,6 +503,7 @@ class HomeFragment : Fragment() {
 
                     val long = p0.locations.lastOrNull()?.longitude
                     val lat = p0.locations.lastOrNull()?.latitude
+                    sharedPreferences.edit().putString(MyConstants.MY_LOCATION_WAY,"GPS").apply()
 
                     if (lat != null && long != null) {
                         homeViewModel.getWitherOfTheDay(lat, long , language )
@@ -497,6 +603,31 @@ class HomeFragment : Fragment() {
     fun convertMeterPerSecToMilePerHour (m : Double ):Int
     {
         return (m*2.23694).toInt()
+    }
+    private fun getIcon(icon: String): Int {
+        val iconValue: Int
+        when (icon) {
+            "01d" -> iconValue = R.drawable.clearsky
+            "01n" -> iconValue = R.drawable.clearsky
+            "02d" -> iconValue = R.drawable.clouds
+            "02n" -> iconValue = R.drawable.clouds
+            "03n" -> iconValue = R.drawable.clouds
+            "03d" -> iconValue = R.drawable.clouds
+            "04d" -> iconValue = R.drawable.clouds
+            "04n" -> iconValue = R.drawable.clouds
+            "09d" -> iconValue = R.drawable.rain
+            "09n" -> iconValue = R.drawable.rain
+            "10d" -> iconValue = R.drawable.rain
+            "10n" -> iconValue = R.drawable.rain
+            "11d" -> iconValue = R.drawable.storm
+            "11n" -> iconValue = R.drawable.storm
+            "13d" -> iconValue = R.drawable.snow
+            "13n" -> iconValue = R.drawable.snow
+            "50d" -> iconValue = R.drawable.mist
+            "50n" -> iconValue = R.drawable.mist
+            else -> iconValue = R.drawable.clearsky
+        }
+        return iconValue
     }
 
 }

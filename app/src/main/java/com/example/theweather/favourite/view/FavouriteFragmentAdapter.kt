@@ -1,6 +1,7 @@
 package com.example.theweather.favourite.view
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.location.Geocoder
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.theweather.MyConstants
 import com.example.theweather.databinding.CurrentDayHourItemBinding
 import com.example.theweather.databinding.FavoriteLocationItemBinding
 import com.example.theweather.model.FavouriteLocationItem
@@ -17,12 +19,15 @@ class FavouriteFragmentAdapter ( var  onClick : OnClickListner<FavouriteLocation
     lateinit var binding : FavoriteLocationItemBinding
 
 
+    lateinit var MySharedPrefrence:SharedPreferences
 
     class FavouriteFragmentViewHolder ( val binding : FavoriteLocationItemBinding) : RecyclerView.ViewHolder(binding.root){}
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavouriteFragmentViewHolder {
         val layoutInflater = parent.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         binding = FavoriteLocationItemBinding.inflate(layoutInflater, parent , false)
+        MySharedPrefrence = parent.context.getSharedPreferences(MyConstants.MY_SHARED_PREFERANCE, Context.MODE_PRIVATE)
+
         return FavouriteFragmentViewHolder(binding)
     }
 
@@ -37,8 +42,10 @@ class FavouriteFragmentAdapter ( var  onClick : OnClickListner<FavouriteLocation
         holder.binding.cvFavLocation.setOnClickListener{
             Log.d("TAG", "onBindViewHolder: in FavLocationcard click latitude ${currentFavLocation.lat} ")
             Log.d("TAG", "onBindViewHolder: in FavLocationcard click longtude ${currentFavLocation.lng} ")
-
+              // e3mel shared preference esmo is comming from fav w a7otelo idecator w long w lat
+            MySharedPrefrence.edit().putString(MyConstants.MY_LOCATION_WAY,"FavScreen,${currentFavLocation.lat},${currentFavLocation.lng}").apply()
             //val action = FavouriteFragmentDirections.actionNavFavouriteToNavHome()
+            // sending my argument from the adapter to the home scren to get new forecast via this data
             val action = FavouriteFragmentDirections.actionNavFavouriteToNavHome().apply {
                 myFullLocationInfo="FavLocation,${currentFavLocation.lat},${currentFavLocation.lng}"
             }
