@@ -1,5 +1,6 @@
 package com.example.theweather.favourite.view
 
+import android.app.AlertDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -93,15 +94,26 @@ lateinit var binding :FragmentFavouriteBinding
     }
 
     override fun OnClick(t: FavouriteLocationItem) { // delete click
-   lifecycleScope.launch {
-            val result = favouriteViewModel.delete(t)
-            if (result > 0) {
-                Toast.makeText(requireContext(), "deleted successfully", Toast.LENGTH_LONG).show()
-                favouriteViewModel.getFavLoacations()
-            } else {
-                Toast.makeText(requireContext(), "Problem with deleting", Toast.LENGTH_LONG).show()
+
+        AlertDialog.Builder(context)
+            .setTitle("Confirm item Delete")
+            .setMessage("Are you sure that you want to delete this location from your favourites?")
+            .setPositiveButton("Yes") { dialog, _ ->
+                lifecycleScope.launch {
+                    val result = favouriteViewModel.delete(t)
+                    if (result > 0) {
+                        Toast.makeText(requireContext(), "deleted successfully", Toast.LENGTH_LONG).show()
+                        favouriteViewModel.getFavLoacations()
+                    } else {
+                        Toast.makeText(requireContext(), "Problem with deleting", Toast.LENGTH_LONG).show()
+                    }
+                }
             }
-        }
+            .setNegativeButton("No") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
+
     }
 
 }

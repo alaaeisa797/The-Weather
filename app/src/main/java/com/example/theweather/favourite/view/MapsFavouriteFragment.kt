@@ -1,5 +1,6 @@
 package com.example.theweather.favourite.view
 
+import android.app.AlertDialog
 import android.location.Geocoder
 import androidx.fragment.app.Fragment
 
@@ -73,18 +74,28 @@ class MapsFavouriteFragment : Fragment() , OnMapReadyCallback {
             if (favLocation == null) {
                 Toast.makeText(requireContext(), "There is no location to be saved", Toast.LENGTH_LONG).show()
             } else {
-
-                lifecycleScope.launch {
-                    val result = favouriteViewModel.insert(favLocation)
-                    if (result > 0) {
-                        // hean 7ot el direction to favScreenfragment
-                        val action = MapsFavouriteFragmentDirections.actionMapsFavouriteFragmentToNavFavourite()
-                        Navigation.findNavController(binding.root).navigate(action)
-                        Toast.makeText(requireContext(), "Saved successfully", Toast.LENGTH_LONG).show()
-                    } else {
-                        Toast.makeText(requireContext(), "Problem with saving", Toast.LENGTH_LONG).show()
+                AlertDialog.Builder(context)
+                    .setTitle("Confimation")
+                    .setMessage("Are you sure that you want to add this location ta favourite ?")
+                    .setPositiveButton("Yes") { dialog, _ ->
+                        lifecycleScope.launch {
+                            val result = favouriteViewModel.insert(favLocation)
+                            if (result > 0) {
+                                // hean 7ot el direction to favScreenfragment
+                                val action = MapsFavouriteFragmentDirections.actionMapsFavouriteFragmentToNavFavourite()
+                                Navigation.findNavController(binding.root).navigate(action)
+                                Toast.makeText(requireContext(), "Saved successfully", Toast.LENGTH_LONG).show()
+                            } else {
+                                Toast.makeText(requireContext(), "Problem with saving", Toast.LENGTH_LONG).show()
+                            }
+                        }
                     }
-                }
+                    .setNegativeButton("No") { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                    .show()
+
+
             }
         }
     }

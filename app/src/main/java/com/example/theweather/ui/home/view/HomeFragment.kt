@@ -118,7 +118,7 @@ class HomeFragment : Fragment() {
                 }
 
             }
-        else if(LocationWay.startsWith("Map"))
+        else if(LocationWay.startsWith("MapSetting"))
         {
             Log.d("TAG", "onStart: da el location way case FavScreen ${LocationWay} ")
             var latLong =LocationWay.split(",")

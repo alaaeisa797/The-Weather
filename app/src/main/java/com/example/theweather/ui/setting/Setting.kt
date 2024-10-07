@@ -139,7 +139,7 @@ class Setting : Fragment() {
             {
                 "خريطه","Map"->{
                         // hena ha2olo ro7 el map
-                    sharedPreferences.edit().putString(MyConstants.MY_LOCATION_WAY, "Map").apply()
+                    //sharedPreferences.edit().putString(MyConstants.MY_LOCATION_WAY, "Map").apply()
                     SharedPrefToDetectdWayOfLocationing.edit().putString("map||gps","gpsIsClicked").apply()
                     val action = SettingDirections.actionNavSettingToSettingMapFragment()
                    Navigation.findNavController(binding.root).navigate(action)

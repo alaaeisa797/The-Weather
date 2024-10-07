@@ -37,6 +37,8 @@ class FavouriteFragmentAdapter ( var  onClick : OnClickListner<FavouriteLocation
 
         holder.binding.ivDeleteFromFav.setOnClickListener{
 
+
+
             onClick.OnClick(currentFavLocation)
         }
         holder.binding.cvFavLocation.setOnClickListener{

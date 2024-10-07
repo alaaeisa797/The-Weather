@@ -1,5 +1,6 @@
 package com.example.theweather.ui.setting
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.SharedPreferences
 import android.location.Geocoder
@@ -59,8 +60,17 @@ class SettingMapFragment : Fragment() , OnMapReadyCallback {
             if (favLocation == null) {
                 Toast.makeText(requireContext(), "There is no location to be saved", Toast.LENGTH_LONG).show()
             } else {
-                val action = SettingMapFragmentDirections.actionSettingMapFragmentToNavHome()
-                Navigation.findNavController(binding.root).navigate(action)
+                AlertDialog.Builder(context)
+                    .setTitle("Confirom Location")
+                    .setMessage("are your sure that your want to show this location forecast ?")
+                    .setPositiveButton("Yes") { dialog, _ ->
+                        val action = SettingMapFragmentDirections.actionSettingMapFragmentToNavHome()
+                        Navigation.findNavController(binding.root).navigate(action)
+                    }
+                    .setNegativeButton("No") { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                    .show()
 
             }
 
@@ -95,7 +105,7 @@ class SettingMapFragment : Fragment() , OnMapReadyCallback {
                 val lat =latLng.latitude // lat
                 val lng = latLng.longitude // long
                 locationAddress // full addresss
-                sharedPreferences.edit().putString(MyConstants.MY_LOCATION_WAY,"Map,$lat,$lng").apply()
+                sharedPreferences.edit().putString(MyConstants.MY_LOCATION_WAY,"MapSetting,$lat,$lng").apply()
                 favLocation=FavouriteLocationItem(address=locationAddress!! , lat =  latLng.latitude, lng = latLng.longitude)
 
             } else {

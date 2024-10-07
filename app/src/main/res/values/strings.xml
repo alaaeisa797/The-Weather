@@ -40,4 +40,5 @@
     <string name="rb_disable">Disable</string>
 
     <string name="btn_mapSetting">Select</string>
+    <string name="map_setting">Map</string>
 </resources>

@@ -63,8 +63,9 @@
     <fragment
         android:id="@+id/settingMapFragment"
         android:name="com.example.theweather.ui.setting.SettingMapFragment"
-        android:label="fragment_setting_map"
-        tools:layout="@layout/fragment_setting_map" >
+        android:label="@string/map_setting"
+        android:fontFamily="@font/f1"
+        tools:layout="@layout/fragment_setting_map">
         <action
             android:id="@+id/action_settingMapFragment_to_nav_home"
             app:destination="@id/nav_home" />
