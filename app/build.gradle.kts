@@ -53,6 +53,7 @@ dependencies {
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.androidx.legacy.support.v4)
     implementation(libs.play.services.maps)
+    implementation(libs.androidx.activity)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -79,4 +80,6 @@ dependencies {
     implementation("com.google.android.gms:play-services-location:21.1.0")
     //circular view
     implementation ("de.hdodenhof:circleimageview:3.1.0")
+// lotti file <splash screen>
+    implementation("com.airbnb.android:lottie:3.6.0")
 }

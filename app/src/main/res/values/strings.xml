@@ -7,7 +7,7 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
-    <string name="menu_home"  android:fontFamily="@font/f1" >Home</string>
+    <string name="menu_home" android:fontFamily="@font/f1">Home</string>
     <string name="menu_setting">Settins</string>
     <string name="menu_alarm">Alarm</string>
     <string name="menu_favourite">Favourite</string>
