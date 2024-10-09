@@ -42,7 +42,7 @@ class MapsFavouriteFragment : Fragment() , OnMapReadyCallback {
     private var myMarker: Marker? = null
     lateinit var map: GoogleMap
     lateinit var binding  : FragmentMapsFavouriteBinding
-    lateinit var favLocation : FavouriteLocationItem
+     var favLocation : FavouriteLocationItem? = null
     lateinit var favouriteViewModel: FavouriteViewModel
     lateinit var vmFactory : FavouriteViewModelFactory
     override fun onCreateView(
@@ -79,7 +79,7 @@ class MapsFavouriteFragment : Fragment() , OnMapReadyCallback {
                     .setMessage("Are you sure that you want to add this location ta favourite ?")
                     .setPositiveButton("Yes") { dialog, _ ->
                         lifecycleScope.launch {
-                            val result = favouriteViewModel.insert(favLocation)
+                            val result = favouriteViewModel.insert(favLocation!!)
                             if (result > 0) {
                                 // hean 7ot el direction to favScreenfragment
                                 val action = MapsFavouriteFragmentDirections.actionMapsFavouriteFragmentToNavFavourite()

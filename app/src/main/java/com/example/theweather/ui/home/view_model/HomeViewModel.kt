@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.theweather.ApiState
 import com.example.theweather.model.CurrentDayWeatherResponce
 import com.example.theweather.model.ForecastResponse
+import com.example.theweather.model.IReposatory
 import com.example.theweather.model.Reposatory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,7 +14,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
-class HomeViewModel (val repo : Reposatory) : ViewModel() {
+class HomeViewModel (val repo :IReposatory) : ViewModel() {
 
     private val mutableLiveData = MutableStateFlow<ApiState<CurrentDayWeatherResponce>>(ApiState.Loading())
     val liveData = mutableLiveData.asStateFlow()

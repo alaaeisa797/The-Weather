@@ -4,19 +4,20 @@ package com.example.theweather.db
 import com.example.theweather.model.FavouriteLocationItem
 import kotlinx.coroutines.flow.Flow
 
-class FavouriteLocationsLocalDataSource (val dao : DAO) {
+class FavouriteLocationsLocalDataSource (val dao : DAO) : IFavouriteLocationsLocalDataSource {
 
-    suspend fun insert (favItem :FavouriteLocationItem) :Long
+    override suspend fun insert (favItem :FavouriteLocationItem) :Long
     {
        return dao.insert(favItem)
     }
 
-    suspend fun delete (favItem :FavouriteLocationItem) : Int
+    override suspend fun delete (favItem :FavouriteLocationItem) : Int
     {
        return dao.delete(favItem)
     }
-     fun getAllFavouriteProduct () : Flow<List<FavouriteLocationItem>>
-    {
+
+    override fun getAllFavouriteProduct(): Flow<List<FavouriteLocationItem>> {
         return  dao.getAllMyFavouriteLocations()
     }
+
 }
