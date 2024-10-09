@@ -67,3 +67,12 @@ data class FavouriteLocationItem(
     val lat: Double,
     val lng :Double
 )
+
+@Entity(tableName = "MyAlarmItems")
+data class  AlarmItem (
+    @PrimaryKey(autoGenerate = true)
+    var id:Int =0,
+    val address : String ,
+    val AlarmDate : String
+
+)

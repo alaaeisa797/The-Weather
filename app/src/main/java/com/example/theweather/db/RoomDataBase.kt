@@ -4,9 +4,10 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.theweather.model.AlarmItem
 import com.example.theweather.model.FavouriteLocationItem
 
-@Database(entities = arrayOf(FavouriteLocationItem::class), version = 1)
+@Database(entities = arrayOf(FavouriteLocationItem::class,AlarmItem::class), version = 2)
 abstract class RoomDataBase : RoomDatabase() {
 
     abstract fun getAllFavLoacations(): DAO
@@ -22,7 +23,7 @@ abstract class RoomDataBase : RoomDatabase() {
                     context.applicationContext,
                     RoomDataBase::class.java,
                     "MyDataBase"
-                ).build()
+                ).fallbackToDestructiveMigration().build()
                 instance = db
                 db
             }
