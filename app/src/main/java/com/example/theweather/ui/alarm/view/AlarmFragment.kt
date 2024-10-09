@@ -26,16 +26,17 @@ import com.example.theweather.network.RemoteDataSource
 import com.example.theweather.network.RetrofitHelper
 import com.example.theweather.ui.alarm.view_model.AlarmViewModel
 import com.example.theweather.ui.alarm.view_model.AlarmViewModelFactory
+import com.example.theweather.ui.home.view.HomeFragment
 import kotlinx.coroutines.launch
 
 
-class AlarmFragment : Fragment() , OnClickListner<AlarmItem> {
+class AlarmFragment : Fragment(), OnClickListner<AlarmItem> {
 
     lateinit var binding: FragmentAlarmBinding
 
-lateinit var vmFactory:AlarmViewModelFactory
-lateinit var alarmViewModel:AlarmViewModel
-lateinit var alarmApadter : AlarmAdapter
+    lateinit var vmFactory: AlarmViewModelFactory
+    lateinit var alarmViewModel: AlarmViewModel
+    lateinit var alarmApadter: AlarmAdapter
 
 
     override fun onCreateView(
@@ -54,34 +55,44 @@ lateinit var alarmApadter : AlarmAdapter
         vmFactory = AlarmViewModelFactory(
             Reposatory.getInstance(
                 RemoteDataSource.getInstance(RetrofitHelper.retrofitInstance.create(NetWorkService::class.java)),
-                FavouriteLocationsLocalDataSource(RoomDataBase.getInstance(requireContext()).getAllFavLoacations())
+                FavouriteLocationsLocalDataSource(
+                    RoomDataBase.getInstance(requireContext()).getAllFavLoacations()
+                )
             )
         )
-        alarmViewModel= ViewModelProvider(this, vmFactory).get(AlarmViewModel::class.java)
+        alarmViewModel = ViewModelProvider(this, vmFactory).get(AlarmViewModel::class.java)
 
         alarmViewModel.getAllAlarms()
 
         alarmApadter = AlarmAdapter(this)
 
-        binding.recyclerView .apply {
+        binding.recyclerView.apply {
             adapter = alarmApadter
             layoutManager = LinearLayoutManager(requireContext())
         }
 
         observOnAllAlarms()
-       binding.floatingActionButton4.setOnClickListener{
+        binding.floatingActionButton4.setOnClickListener {
+            if (!HomeFragment.isConnected)
+            {
+                Toast.makeText(requireContext(), "cant open the map when ther is no network Connection", Toast.LENGTH_LONG).show()
 
-        val action =
-            AlarmFragmentDirections.actionNavAlarmToMapsAlarmFragment()
-        Navigation.findNavController(binding.root).navigate(action)
+            }
+            else
+            {
+                val action =
+                    AlarmFragmentDirections.actionNavAlarmToMapsAlarmFragment()
+                Navigation.findNavController(binding.root).navigate(action)
+            }
 
+
+
+        }
     }
-    }
 
-    fun observOnAllAlarms ()
-    {
+    fun observOnAllAlarms() {
         lifecycleScope.launch {
-            alarmViewModel.localLiveData .collect { result ->
+            alarmViewModel.localLiveData.collect { result ->
                 when (result) {
                     is ApiState.Loading -> {
 
@@ -90,12 +101,10 @@ lateinit var alarmApadter : AlarmAdapter
 
                     is ApiState.Success -> {
                         val myResult = result.data
-                       alarmApadter.submitList(myResult)
-
+                        alarmApadter.submitList(myResult)
                     }
 
                     else -> {
-
                         Log.d("TAG", "onCreateView: Faliure case ")
                     }
                 }
@@ -115,12 +124,14 @@ lateinit var alarmApadter : AlarmAdapter
             .setMessage("Are you sure that you want to delete this alarm")
             .setPositiveButton("Yes") { dialog, _ ->
                 lifecycleScope.launch {
-                    val result = alarmViewModel.deleteAlarm (t)
+                    val result = alarmViewModel.deleteAlarm(t)
                     if (result > 0) {
-                        Toast.makeText(requireContext(), "deleted successfully", Toast.LENGTH_LONG).show()
+                        Toast.makeText(requireContext(), "deleted successfully", Toast.LENGTH_LONG)
+                            .show()
                         alarmViewModel.getAllAlarms()
                     } else {
-                        Toast.makeText(requireContext(), "Problem with deleting", Toast.LENGTH_LONG).show()
+                        Toast.makeText(requireContext(), "Problem with deleting", Toast.LENGTH_LONG)
+                            .show()
                     }
                 }
             }

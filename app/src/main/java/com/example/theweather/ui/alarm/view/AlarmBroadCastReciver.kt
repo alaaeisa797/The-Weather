@@ -39,15 +39,16 @@ class AlarmBroadCastReciver : BroadcastReceiver() {
     companion object {
         const val CHANNEL_ID = "MyChannel"
         const val NOTIFICATION_ID = 200
-        const val ACTION_DISMISS = "com.example.weatherwise.DISMISS_ALERT"
+        const val _DISMISS = "com.example.weatherwise.DISMISS_ALERT"
         private var Myringtone: Ringtone? = null
     }
     override fun onReceive(context: Context, intent: Intent) {
         latitude = intent.extras?.getDouble("lat")?.toDouble()
         longitude = intent.extras?.getDouble("long")?.toDouble()
+
         Log.d("TAG", "onReceive: fel alarm braod castReciver  long &lat  $latitude $longitude")
         when (intent.action) {
-            ACTION_DISMISS -> closeMyAlert(context)
+            _DISMISS -> closeMyAlert(context)
             else -> CoroutineScope(Dispatchers.IO).launch {
                 val response =  Reposatory.getInstance(
                     RemoteDataSource.getInstance(RetrofitHelper.retrofitInstance.create(
@@ -56,7 +57,7 @@ class AlarmBroadCastReciver : BroadcastReceiver() {
                 ).getWitherOfTheDay(latitude!!, longitude!!, "en") // el mafrod a check fel shared prefrenece 3al lo8a
 
                 response.catch {
-                    Toast.makeText(context.applicationContext, "Failure", Toast.LENGTH_SHORT).show()
+                    showFallbackNotification(context)
                 }
                     .collect {
                     withContext(Dispatchers.Main) {
@@ -73,10 +74,10 @@ class AlarmBroadCastReciver : BroadcastReceiver() {
         val channelId = CHANNEL_ID
         makeMyNotificationChannel(context, channelId)
 
-        val soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
+        val mySoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
 
         val dismissIntent = Intent(context, AlarmBroadCastReciver::class.java).apply {
-            action = ACTION_DISMISS
+            action = _DISMISS
         }
         val dismissPendingIntent = PendingIntent.getBroadcast(
             context,
@@ -111,7 +112,7 @@ class AlarmBroadCastReciver : BroadcastReceiver() {
                         dismissPendingIntent
                     )
                     .setAutoCancel(true)
-                    .setSound(null)  // Disable notification sound
+                    .setSound(null)
                     .setContentIntent(openFragmentPendingIntent)
 
                 val notificationManager =
@@ -132,7 +133,7 @@ class AlarmBroadCastReciver : BroadcastReceiver() {
                             dismissPendingIntent
                         )
                         .setAutoCancel(true)
-                        .setSound(null)  // Disable notification sound
+                        .setSound(null)
                         .setContentIntent(openFragmentPendingIntent)
 
                     val notificationManager =
@@ -151,7 +152,7 @@ class AlarmBroadCastReciver : BroadcastReceiver() {
         // turn on notification sound based on my shared pref
         if (NotifiCondition == "EnableSound") {
             Log.d("TAG", "showNotification: da el NotifiCondition gaw el if $NotifiCondition ")
-            NotificationSoundActiveted(context, soundUri)
+            NotificationSoundActiveted(context, mySoundUri)
         }
         else
         {
@@ -218,6 +219,46 @@ class AlarmBroadCastReciver : BroadcastReceiver() {
             return "$city "
         }
 
+    }
+
+    private fun showFallbackNotification(context: Context) {
+        val channelId = CHANNEL_ID
+        makeMyNotificationChannel(context, channelId)
+
+        val dismissIntent = Intent(context, AlarmBroadCastReciver::class.java).apply {
+            action = _DISMISS
+        }
+        val dismissPendingIntent = PendingIntent.getBroadcast(
+            context,
+            0,
+            dismissIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val openFragmentIntent = Intent(context, AlarmFragment::class.java)
+        val openFragmentPendingIntent = PendingIntent.getActivity(
+            context, 0, openFragmentIntent, PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val notificationBuilder = NotificationCompat.Builder(context, channelId)
+            .setSmallIcon(R.drawable.clear)
+            .setContentTitle("The Weather App")
+            .setContentText("Weather data is unavailable at this moment.")
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setCategory(NotificationCompat.CATEGORY_ALARM)
+            .setVibrate(longArrayOf(1000, 1000, 1000, 1000, 1000))
+            .addAction(
+                android.R.drawable.ic_menu_close_clear_cancel,
+                "Dismiss",
+                dismissPendingIntent
+            )
+            .setAutoCancel(true)
+            .setSound(null) // Disable sound
+            .setContentIntent(openFragmentPendingIntent)
+
+        val notificationManager =
+            ContextCompat.getSystemService(context, NotificationManager::class.java)
+        notificationManager?.notify(NOTIFICATION_ID, notificationBuilder.build())
     }
 
 

@@ -23,6 +23,7 @@ import com.example.theweather.model.Reposatory
 import com.example.theweather.network.NetWorkService
 import com.example.theweather.network.RemoteDataSource
 import com.example.theweather.network.RetrofitHelper
+import com.example.theweather.ui.home.view.HomeFragment
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -67,9 +68,17 @@ lateinit var binding :FragmentFavouriteBinding
             layoutManager = LinearLayoutManager(requireContext())
         }
          binding.floatingActionButton.setOnClickListener{
+             if (!HomeFragment.isConnected)
+             {
+                 Toast.makeText(requireContext(), "cant open the map when ther is no network Connection", Toast.LENGTH_LONG).show()
 
-         val action = FavouriteFragmentDirections.actionNavFavouriteToMapsFavouriteFragment()
-                     Navigation.findNavController(view).navigate(action)
+             }
+             else {
+                 val action = FavouriteFragmentDirections.actionNavFavouriteToMapsFavouriteFragment()
+                 Navigation.findNavController(view).navigate(action)
+             }
+
+
         }
 
         lifecycleScope.launch {

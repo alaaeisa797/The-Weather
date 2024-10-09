@@ -39,13 +39,15 @@ class AlarmAdapter (var  onClick : OnClickListner<AlarmItem>) : ListAdapter<Alar
 
       holder.binding.tvAlarmCityAndTime.text = currentAlarm.address
 
-        holder.binding.deleteAlarm .setOnClickListener{
 
 
 
+        holder.binding.cvAlarm.setOnClickListener{
             onClick.OnClick(currentAlarm)
         }
+
     }
+
 
 
 }

@@ -16,6 +16,7 @@ import androidx.navigation.Navigation
 import com.example.theweather.MyConstants
 
 import com.example.theweather.databinding.FragmentSettingBinding
+import com.example.theweather.ui.home.view.HomeFragment
 
 class Setting : Fragment() {
 
@@ -51,27 +52,83 @@ class Setting : Fragment() {
         val locationWay = sharedPreferences.getString(MyConstants.MY_LOCATION_WAY,"GPS")
         val mapOrGps = SharedPrefToDetectdWayOfLocationing.getString("map||gps","gpsIsClicked")
 
-        when(language)
-        {
-            "ar"-> binding.rbArabic.isChecked = true
-            "en"-> binding.rbEnglish.isChecked = true
+        if (!HomeFragment.isConnected) {
+
+            binding.rbArabic.apply {
+                isChecked = false
+                isEnabled = false
+            }
+            binding.rbEnglish.apply {
+                isChecked = false
+                isEnabled = false
+            }
+
+            binding.rbKelvin.apply {
+                isChecked = false
+                isEnabled = false
+            }
+
+            binding.rbFehrenhayt.apply {
+                isChecked = false
+                isEnabled = false
+            }
+
+            binding.rbCelicious.apply {
+                isChecked = false
+                isEnabled = false
+            }
+
+            binding.rbMileHour.apply {
+                isChecked = false
+                isEnabled = false
+            }
+            binding.rbMeterSec.apply {
+                isChecked = false
+                isEnabled = false
+            }
+            binding.rbEnableNotofication.apply {
+                isChecked = false
+                isEnabled = false
+            }
+            binding.rbDisableNotofication.apply {
+                isChecked = false
+                isEnabled = false
+            }
+            binding.rbMap.apply {
+                isChecked = false
+                isEnabled = false
+            }
+            binding.rbGps.apply {
+                isChecked = false
+                isEnabled = false
+            }
         }
-        when(unit)
+        else
         {
-            "Kelvin"-> binding.rbKelvin.isChecked = true
-            "Fahrenheit"-> binding.rbFehrenhayt.isChecked = true
-            "Celsius"-> binding.rbCelicious.isChecked = true
-        }
-        when(windSpeed)
-        {
-           "Meter/Sec" ->binding.rbMeterSec.isChecked = true
-           "Mile/Hour" ->binding.rbMileHour.isChecked = true
-        }
-        when (notification)
-        {
-            "EnableSound"-> binding.rbEnableNotofication .isChecked = true
+            when(language)
+            {
+
+                "ar"-> binding.rbArabic.isChecked = true
+                "en"-> binding.rbEnglish.isChecked = true
+            }
+            when(unit)
+            {
+                "Kelvin"-> binding.rbKelvin.isChecked = true
+                "Fahrenheit"-> binding.rbFehrenhayt.isChecked = true
+                "Celsius"-> binding.rbCelicious.isChecked = true
+            }
+            when(windSpeed)
+            {
+                "Meter/Sec" ->binding.rbMeterSec.isChecked = true
+                "Mile/Hour" ->binding.rbMileHour.isChecked = true
+            }
+            when (notification)
+            {
+                "EnableSound"-> binding.rbEnableNotofication .isChecked = true
                 "DisableSound"->binding.rbDisableNotofication.isChecked=true
+            }
         }
+
 //        when(mapOrGps)
 //        {
 //            "gpsIsClicked"-> binding.rbGps.isChecked = true

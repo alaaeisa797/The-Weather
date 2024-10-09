@@ -87,7 +87,7 @@ lateinit var binding : FragmentMapsAlarmBinding
             if (myAlarm == null || latitude ==null || longitude ==null ) {
                 Toast.makeText(requireContext(), "There is no location to be saved", Toast.LENGTH_LONG).show()
             } else {
-                DatePickerDialog( latitude, longitude )
+                DateDialog( latitude, longitude )
             }
         }
     }
@@ -134,7 +134,7 @@ lateinit var binding : FragmentMapsAlarmBinding
         }
     }
 
-    private fun DatePickerDialog( lat :Double , lng : Double) {
+    private fun DateDialog(lat :Double, lng : Double) {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
@@ -143,12 +143,12 @@ lateinit var binding : FragmentMapsAlarmBinding
         DatePickerDialog(
             requireContext(),
             { _, selectedYear, selectedMonth, selectedDay ->
-                val selectedDate = Calendar.getInstance().apply {
+                val targtedDate = Calendar.getInstance().apply {
                     set(Calendar.YEAR, selectedYear)
                     set(Calendar.MONTH, selectedMonth)
                     set(Calendar.DAY_OF_MONTH, selectedDay)
                 }
-                showTimePickerDialog(selectedDate , lat , lng)
+                showTimePicker(targtedDate , lat , lng)
             },
             year, month, day
         ).apply {
@@ -157,23 +157,23 @@ lateinit var binding : FragmentMapsAlarmBinding
     }
 
 
-    private fun showTimePickerDialog(selectedDate: Calendar , lat : Double , lng : Double) {
-        val hour = selectedDate.get(Calendar.HOUR_OF_DAY)
-        val minute = selectedDate.get(Calendar.MINUTE)
+    private fun showTimePicker(targtedDate: Calendar, lat : Double, lng : Double) {
+        val hour = targtedDate.get(Calendar.HOUR_OF_DAY)
+        val minute = targtedDate.get(Calendar.MINUTE)
 
         TimePickerDialog(
             requireContext(),
             { _, selectedHour, selectedMinute ->
-                selectedDate.apply {
+                targtedDate.apply {
                     set(Calendar.HOUR_OF_DAY, selectedHour)
                     set(Calendar.MINUTE, selectedMinute)
                     set(Calendar.SECOND, 0)
                     set(Calendar.MILLISECOND, 0)
                 }
-                if (selectedDate.timeInMillis <= System.currentTimeMillis()) {
+                if (targtedDate.timeInMillis <= System.currentTimeMillis()) {
                     Toast.makeText(requireContext(), "you dont have a time machine to back in time ", Toast.LENGTH_LONG).show()
                 } else {
-                    scheduleAlarm(selectedDate ,lat ,lng )
+                    setMyAlarm(targtedDate ,lat ,lng )
 
                 }
             },
@@ -182,10 +182,11 @@ lateinit var binding : FragmentMapsAlarmBinding
     }
 
     @SuppressLint("ScheduleExactAlarm")
-    private fun scheduleAlarm(selectedDateTime: Calendar , latitude : Double ,longitude:Double ) {
+    private fun setMyAlarm(selectedDateTime: Calendar, latitude : Double, longitude:Double ) {
         val intent = Intent(requireContext(), AlarmBroadCastReciver::class.java)
         intent.putExtra("lat", latitude)
-        intent.putExtra("w", longitude)
+        intent.putExtra("long", longitude)
+
         pendingIntent = PendingIntent.getBroadcast(
             requireContext(), 0, intent,
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
@@ -204,6 +205,7 @@ lateinit var binding : FragmentMapsAlarmBinding
             {
                 Toast.makeText(requireContext(), " Alarm added sucessfully ", Toast.LENGTH_LONG).show()
 
+                // now mavigate to the alarmFragment
                 val action = MapsAlarmFragmentDirections.actionMapsAlarmFragmentToNavAlarm()
                 Navigation.findNavController(binding.root).navigate(action)
             }

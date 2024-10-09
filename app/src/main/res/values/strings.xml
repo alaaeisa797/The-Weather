@@ -42,4 +42,5 @@
     <string name="btn_mapSetting">Select</string>
     <string name="map_setting">Map</string>
     <string name="btn_ChooseLocationOfTheAalrm">Choose</string>
+    <string name="mapAlarm">Map</string>
 </resources>

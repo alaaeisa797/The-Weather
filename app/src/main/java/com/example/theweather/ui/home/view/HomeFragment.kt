@@ -10,6 +10,8 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.LocationManager
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.os.Looper
 import android.provider.Settings
@@ -44,6 +46,8 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -68,6 +72,7 @@ class HomeFragment : Fragment() {
     var minTemp = Double.MAX_VALUE
     var maxTemp = Double.MIN_VALUE
 
+    val gson = Gson()
 
     val permissionId = 1
 
@@ -75,20 +80,19 @@ class HomeFragment : Fragment() {
     lateinit var homeViewModel: HomeViewModel
     lateinit var vmFactory: HomeViewModelFactory
 
+    companion object {
+        var isConnected = false
+    }
 
     override fun onStart() {
         super.onStart()
 
 
-       // language= "ar"
-        sharedPreferences = requireActivity().getSharedPreferences(MyConstants.MY_SHARED_PREFERANCE,Context.MODE_PRIVATE)
+        // language= "ar"
 
 
-       language = sharedPreferences.getString(MyConstants.MY_LANGYAGE_API_KEY,"en")?:"en"
-        unit = sharedPreferences.getString(MyConstants.MY_TEMP_UNIT,"Celsius")?:"Celsius"
-        windSpeed = sharedPreferences.getString(MyConstants.MY_WIND_SPEED,"Meter/Sec")?:"Meter/Sec"
 
-        LocationWay = sharedPreferences.getString(MyConstants.MY_LOCATION_WAY,"GPS")?:"GPS"
+
         Log.d("TAG", "onStart: da el location way bara 5ales ${LocationWay} ")
 //            val indecator: String = HomeFragmentArgs.fromBundle(arguments).indecator
 //
@@ -101,8 +105,8 @@ class HomeFragment : Fragment() {
 //        Log.d("TAG", "onStart:  latitude $latitude")
 //        Log.d("TAG", "onStart:  longtude $longitude")
 
-        if (LocationWay.startsWith("GPS"))
-            {
+        if (isConnected) {
+            if (LocationWay.startsWith("GPS")) {
                 Log.d("TAG", "onStart: da el location way fel case GPS ${LocationWay} ")
                 if (checkSelfPermission()) {
                     Log.d("TAG", "onStart: checkSelfPermission")
@@ -111,48 +115,41 @@ class HomeFragment : Fragment() {
                     } else {
                         enableLocationServices()
                     }
-                } else
-                {
+                } else {
+                    Log.d("TAG", "onStart: requestPermission")
+                    requestPermission()
+                }
+
+            } else if (LocationWay.startsWith("MapSetting")) {
+                Log.d("TAG", "onStart: da el location way case FavScreen ${LocationWay} ")
+                var latLong = LocationWay.split(",")
+                var lat = latLong.get(1).toDouble()
+                var long = latLong.get(2).toDouble()
+
+                getSpecificLocation(lat, long, language)
+
+            } else if (LocationWay.startsWith("FavScreen")) {
+                Log.d("TAG", "onStart: da el location way case FavScreen ${LocationWay} ")
+                var latLong = LocationWay.split(",")
+                var lat = latLong.get(1).toDouble()
+                var long = latLong.get(2).toDouble()
+
+                getSpecificLocation(lat, long, language)
+            } else {
+                if (checkSelfPermission()) {
+                    Log.d("TAG", "onStart: checkSelfPermission")
+                    if (isLocationEnabled()) {
+                        getFreshLocation()
+                    } else {
+                        enableLocationServices()
+                    }
+                } else {
                     Log.d("TAG", "onStart: requestPermission")
                     requestPermission()
                 }
 
             }
-        else if(LocationWay.startsWith("MapSetting"))
-        {
-            Log.d("TAG", "onStart: da el location way case FavScreen ${LocationWay} ")
-            var latLong =LocationWay.split(",")
-            var lat = latLong.get(1).toDouble()
-            var long= latLong.get(2).toDouble()
-
-            getSpecificLocation(lat,long,language)
-
         }
-        else if (LocationWay.startsWith("FavScreen"))
-            {
-                Log.d("TAG", "onStart: da el location way case FavScreen ${LocationWay} ")
-                  var latLong =LocationWay.split(",")
-                var lat = latLong.get(1).toDouble()
-                var long= latLong.get(2).toDouble()
-
-                getSpecificLocation(lat,long,language)
-            }
-        else {
-            if (checkSelfPermission()) {
-                Log.d("TAG", "onStart: checkSelfPermission")
-                if (isLocationEnabled()) {
-                    getFreshLocation()
-                } else {
-                    enableLocationServices()
-                }
-            } else
-            {
-                Log.d("TAG", "onStart: requestPermission")
-                requestPermission()
-            }
-
-        }
-
 
 
 //
@@ -246,6 +243,25 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        sharedPreferences = requireActivity().getSharedPreferences(
+            MyConstants.MY_SHARED_PREFERANCE,
+            Context.MODE_PRIVATE
+        )
+        language = sharedPreferences.getString(MyConstants.MY_LANGYAGE_API_KEY, "en") ?: "en"
+        unit = sharedPreferences.getString(MyConstants.MY_TEMP_UNIT, "Celsius") ?: "Celsius"
+        windSpeed =
+            sharedPreferences.getString(MyConstants.MY_WIND_SPEED, "Meter/Sec") ?: "Meter/Sec"
+
+        LocationWay = sharedPreferences.getString(MyConstants.MY_LOCATION_WAY, "GPS") ?: "GPS"
+
+        val connectivityManager =
+            requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val network = connectivityManager.activeNetwork
+        val networkCapabilities = connectivityManager.getNetworkCapabilities(network)
+
+        isConnected =
+            networkCapabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) == true
+
         //initalize my ViewModel
         vmFactory = HomeViewModelFactory(
             Reposatory.getInstance(
@@ -270,11 +286,15 @@ class HomeFragment : Fragment() {
             adapter = weekluTempAdapter
             layoutManager = LinearLayoutManager(requireContext())
         }
-        observOnCurrentDayForecast()
-        onserveOnDailyForecast()
+        if (!isConnected) {
+            showCachedData()
+        } else {
+            observOnCurrentDayForecast()
+            onserveOnDailyForecast()
+        }
     }
-    fun onserveOnDailyForecast ()
-    {
+
+    fun onserveOnDailyForecast() {
 
         lifecycleScope.launch {
             homeViewModel.liveDataForFiveDays.collectLatest { result ->
@@ -304,8 +324,7 @@ class HomeFragment : Fragment() {
         }
     }
 
-    fun observOnCurrentDayForecast ()
-    {
+    fun observOnCurrentDayForecast() {
         lifecycleScope.launch {
             homeViewModel.liveData.collect { result ->
                 when (result) {
@@ -317,7 +336,9 @@ class HomeFragment : Fragment() {
                     is ApiState.Success -> {
                         val myResult = result.data
                         setCurrentWeatherDataAndCondition(myResult)
-
+                        // هنخزن الكارد
+                        val json = gson.toJson(myResult)
+                        sharedPreferences.edit().putString(MyConstants.My_CARDS_CASH, json).apply()
                     }
 
                     else -> {
@@ -329,8 +350,7 @@ class HomeFragment : Fragment() {
         }
     }
 
-    fun setDailyMaxAndMinTemp (result : ForecastResponse)
-    {
+    fun setDailyMaxAndMinTemp(result: ForecastResponse) {
         val setOfDate /*to ensure uniqnesses*/ = mutableSetOf<String>()
         val ListOfMaxAndMinTempEachDay = mutableListOf<ForecastItem>()
         result.list.forEach {
@@ -342,18 +362,21 @@ class HomeFragment : Fragment() {
             }
             if (it.main.temp_max > maxTemp) maxTemp = it.main.temp_max
             if (it.main.temp_min < minTemp) minTemp = it.main.temp_min
-            ListOfMaxAndMinTempEachDay.get(ListOfMaxAndMinTempEachDay.size - 1).main.temp_max = maxTemp
-            ListOfMaxAndMinTempEachDay.get(ListOfMaxAndMinTempEachDay.size - 1).main.temp_min = minTemp
+            ListOfMaxAndMinTempEachDay.get(ListOfMaxAndMinTempEachDay.size - 1).main.temp_max =
+                maxTemp
+            ListOfMaxAndMinTempEachDay.get(ListOfMaxAndMinTempEachDay.size - 1).main.temp_min =
+                minTemp
 
         }
         //Submit to my adapter of weekly
 
         weekluTempAdapter.submitList(ListOfMaxAndMinTempEachDay)
-
+        //هنا نخزن اليست بتاعة الايام
+        val json = gson.toJson(ListOfMaxAndMinTempEachDay)
+        sharedPreferences.edit().putString(MyConstants.WEEK_FORECAST, json).apply()
     }
 
-    fun setHourlyForeCast (result : ForecastResponse)
-    {
+    fun setHourlyForeCast(result: ForecastResponse) {
         // today date
         val today = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
 
@@ -364,29 +387,37 @@ class HomeFragment : Fragment() {
         // Filter items by today's date and tomorrow's date
         val Alist = result.list.filter { forecastItem ->
             // Parse the dt_txt to a Date object
-            val itemDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).parse(forecastItem.dt_txt)
+            val itemDate = SimpleDateFormat(
+                "yyyy-MM-dd HH:mm:ss",
+                Locale.getDefault()
+            ).parse(forecastItem.dt_txt)
             // Format the parsed date to yyyy-MM-dd format
-            val formattedItemDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(itemDate)
+            val formattedItemDate =
+                SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(itemDate)
             // Compare with today's date and tomorrow's date
             formattedItemDate == today || formattedItemDate == tomorrow
         }
 
         // Submit to my adapter of horuly
         hourlyTempAdapter.submitList(Alist)
-
+//هنا نخزن اليست بتاعة الساعات
+        val json = gson.toJson(Alist)
+        sharedPreferences.edit().putString(MyConstants.TO_DAY_TEMPS, json).apply()
     }
-    fun setCurrentWeatherDataAndCondition(result :CurrentDayWeatherResponce)
-    {
 
-        when (language)
-        {
-            "ar"->{
-                when (windSpeed)
-                {
-                    "Mile/Hour"->{
-                        binding.tvWindSpeed.text = "${convertMeterPerSecToMilePerHour(result.wind.speed.toDouble())} ميل/ساعه "
+    fun setCurrentWeatherDataAndCondition(result: CurrentDayWeatherResponce) {
+
+        when (language) {
+            "ar" -> {
+                when (windSpeed) {
+                    "Mile/Hour" -> {
+                        binding.tvWindSpeed.text =
+                            "${convertMeterPerSecToMilePerHour(result.wind.speed.toDouble())} ميل/ساعه "
                     }
-                    else->{binding.tvWindSpeed.text = "${result.wind.speed} م/ث"}
+
+                    else -> {
+                        binding.tvWindSpeed.text = "${result.wind.speed} م/ث"
+                    }
                 }
                 // card 1
                 binding.tvTodayDisc.text = result.weather.get(0).description
@@ -395,74 +426,88 @@ class HomeFragment : Fragment() {
                 binding.tvLocation.text = readable_location
 
 
-        binding.tvPressure.text = "${result.main.pressure} ََض ج"
-        binding.tvHumidity.text = "${result.main.humidity} %"
+                binding.tvPressure.text = "${result.main.pressure} ََض ج"
+                binding.tvHumidity.text = "${result.main.humidity} %"
 
-        binding.tvCloud.text = "${result.clouds.all} %"
-        binding.tvFeelsLike.text = "${result.main.feels_like} ٍس "
-        binding.tvVisability.text = "${result.visibility} م "
+                binding.tvCloud.text = "${result.clouds.all} %"
+                binding.tvFeelsLike.text = "${result.main.feels_like} ٍس "
+                binding.tvVisability.text = "${result.visibility} م "
 
-                when (unit )
-                {
-                    "Fahrenheit"->{
-                        binding.tvFeelsLike.text= "${convertFromCelsiusToFahrenheit(result.main.feels_like).toString()}ف°"
-                        binding.tvTodayTemperature.text = "${convertFromCelsiusToFahrenheit(result.main.temp)}ف° "
+                when (unit) {
+                    "Fahrenheit" -> {
+                        binding.tvFeelsLike.text =
+                            "${convertFromCelsiusToFahrenheit(result.main.feels_like).toString()}ف°"
+                        binding.tvTodayTemperature.text =
+                            "${convertFromCelsiusToFahrenheit(result.main.temp)}ف° "
                     }
-                    "Kelvin"->{
-                        binding.tvFeelsLike.text= "${convertFromCelsiusToKelvin(result.main.feels_like).toString()}ك°"
-                        binding.tvTodayTemperature.text = "${convertFromCelsiusToKelvin(result.main.temp)}ك° "
+
+                    "Kelvin" -> {
+                        binding.tvFeelsLike.text =
+                            "${convertFromCelsiusToKelvin(result.main.feels_like).toString()}ك°"
+                        binding.tvTodayTemperature.text =
+                            "${convertFromCelsiusToKelvin(result.main.temp)}ك° "
                     }
-                    else ->{
+
+                    else -> {
                         binding.tvFeelsLike.text = "${result.main.feels_like} س°"
                         binding.tvTodayTemperature.text = "${result.main.temp}س° "
                     }
                 }
 
             }
-                else -> // case language english
-                    {
-                        when (windSpeed)
-                        {
-                            "Mile/Hour"->{
 
-                                binding.tvWindSpeed.text = "${convertMeterPerSecToMilePerHour(result.wind.speed.toDouble())} mile/h"
-                            }
-                            else->{ binding.tvWindSpeed.text = "${result.wind.speed} m/sec"}
-                        }
-                        // card 1
-
-                        binding.tvTodayDisc.text = result.weather.get(0).description
-                        val readable_location =
-                            getReadableLocation(result.coord.lat, result.coord.lon)
-                        binding.tvLocation.text = readable_location
-                        binding.ivToDayWeatherConditionImage.setImageResource(getIcon(result.weather.get(0).icon))
-                        // Log.d("TAG", "onCreateView: el readable location ${readable_location?.get(0)?.getAddressLine(0).toString()}")
-
-                        //card 2
-                        binding.tvPressure.text = "${result.main.pressure} hpa"
-                        binding.tvHumidity.text = "${result.main.humidity} %"
-
-
-                        binding.tvCloud.text = "${result.clouds.all} %"
-                        binding.tvVisability.text = "${result.visibility} m"
-
-                        // now displaying the units
-                        when (unit ){
-                            "Fahrenheit"->{
-                                binding.tvFeelsLike.text= "${convertFromCelsiusToFahrenheit(result.main.feels_like).toString()}°F"
-                                binding.tvTodayTemperature.text = "${convertFromCelsiusToFahrenheit(result.main.temp)}°F "
-                            }
-                            "Kelvin"->{
-                                binding.tvFeelsLike.text= "${convertFromCelsiusToKelvin(result.main.feels_like).toString()}°K"
-                                binding.tvTodayTemperature.text = "${convertFromCelsiusToKelvin(result.main.temp)}°K "
-                            }
-                            else ->{
-                                binding.tvFeelsLike.text = "${result.main.feels_like} °C"
-                                binding.tvTodayTemperature.text = "${result.main.temp}°C "
-                            }
-                        }
-
+            else -> // case language english
+            {
+                when (windSpeed) {
+                    "Mile/Hour" -> {
+                        binding.tvWindSpeed.text =
+                            "${convertMeterPerSecToMilePerHour(result.wind.speed.toDouble())} mile/h"
                     }
+
+                    else -> {
+                        binding.tvWindSpeed.text = "${result.wind.speed} m/sec"
+                    }
+                }
+                // card 1
+
+                binding.tvTodayDisc.text = result.weather.get(0).description
+                val readable_location =
+                    getReadableLocation(result.coord.lat, result.coord.lon)
+                binding.tvLocation.text = readable_location
+                binding.ivToDayWeatherConditionImage.setImageResource(getIcon(result.weather.get(0).icon))
+                // Log.d("TAG", "onCreateView: el readable location ${readable_location?.get(0)?.getAddressLine(0).toString()}")
+
+                //card 2
+                binding.tvPressure.text = "${result.main.pressure} hpa"
+                binding.tvHumidity.text = "${result.main.humidity} %"
+
+
+                binding.tvCloud.text = "${result.clouds.all} %"
+                binding.tvVisability.text = "${result.visibility} m"
+
+                // now displaying the units
+                when (unit) {
+                    "Fahrenheit" -> {
+                        binding.tvFeelsLike.text =
+                            "${convertFromCelsiusToFahrenheit(result.main.feels_like).toString()}°F"
+                        binding.tvTodayTemperature.text =
+                            "${convertFromCelsiusToFahrenheit(result.main.temp)}°F "
+                    }
+
+                    "Kelvin" -> {
+                        binding.tvFeelsLike.text =
+                            "${convertFromCelsiusToKelvin(result.main.feels_like).toString()}°K"
+                        binding.tvTodayTemperature.text =
+                            "${convertFromCelsiusToKelvin(result.main.temp)}°K "
+                    }
+
+                    else -> {
+                        binding.tvFeelsLike.text = "${result.main.feels_like} °C"
+                        binding.tvTodayTemperature.text = "${result.main.temp}°C "
+                    }
+                }
+
+            }
         }
 
 
@@ -486,9 +531,9 @@ class HomeFragment : Fragment() {
         super.onDestroyView()
     }
 
-    fun getSpecificLocation(lat: Double, long: Double,language: String) {
-        homeViewModel.getfiveForecast(lat, long,language)
-        homeViewModel.getWitherOfTheDay(lat, long,language)
+    fun getSpecificLocation(lat: Double, long: Double, language: String) {
+        homeViewModel.getfiveForecast(lat, long, language)
+        homeViewModel.getWitherOfTheDay(lat, long, language)
 
     }
 
@@ -509,13 +554,13 @@ class HomeFragment : Fragment() {
 
                     val long = p0.locations.lastOrNull()?.longitude
                     val lat = p0.locations.lastOrNull()?.latitude
-                    sharedPreferences.edit().putString(MyConstants.MY_LOCATION_WAY,"GPS").apply()
+                    sharedPreferences.edit().putString(MyConstants.MY_LOCATION_WAY, "GPS").apply()
 
                     if (lat != null && long != null) {
-                        homeViewModel.getWitherOfTheDay(lat, long , language )
+                        homeViewModel.getWitherOfTheDay(lat, long, language)
                     }
                     if (lat != null && long != null) {
-                        homeViewModel.getfiveForecast(lat, long , language )
+                        homeViewModel.getfiveForecast(lat, long, language)
                     }
 
                     binding.tvLocation.text = p0.lastLocation?.longitude.toString()
@@ -597,19 +642,19 @@ class HomeFragment : Fragment() {
 
         return "$city, $state, $country"
     }
-    fun convertFromCelsiusToFahrenheit(temp :Double) :Int
-    {
+
+    fun convertFromCelsiusToFahrenheit(temp: Double): Int {
         return ((temp * 1.8) + 32).toInt()
     }
-    fun convertFromCelsiusToKelvin (temp :Double) :Int
-    {
-       return (temp+273.15).toInt()
+
+    fun convertFromCelsiusToKelvin(temp: Double): Int {
+        return (temp + 273.15).toInt()
     }
 
-    fun convertMeterPerSecToMilePerHour (m : Double ):Int
-    {
-        return (m*2.23694).toInt()
+    fun convertMeterPerSecToMilePerHour(m: Double): Int {
+        return (m * 2.23694).toInt()
     }
+
     private fun getIcon(icon: String): Int {
         val iconValue: Int
         when (icon) {
@@ -634,6 +679,31 @@ class HomeFragment : Fragment() {
             else -> iconValue = R.drawable.clearsky
         }
         return iconValue
+    }
+
+
+    fun showCachedData() {
+        try {
+            val type = object : TypeToken<List<ForecastItem>>() {}.type
+            val cachingDaily: List<ForecastItem> =
+                gson.fromJson(sharedPreferences.getString(MyConstants.TO_DAY_TEMPS, "[]"), type) ?: emptyList()
+            val fiveDay: List<ForecastItem> =
+                gson.fromJson(sharedPreferences.getString(MyConstants.WEEK_FORECAST, "[]"), type) ?: emptyList()
+            val cachingCard = gson.fromJson(sharedPreferences.getString(MyConstants.My_CARDS_CASH, "{}"), CurrentDayWeatherResponce::class.java)
+
+            hourlyTempAdapter.submitList(cachingDaily)
+            weekluTempAdapter.submitList(fiveDay)
+
+            if (cachingCard != null) {
+                setCurrentWeatherDataAndCondition(cachingCard)
+            } else {
+                Log.e("HomeFragment", "Cached card data is null")
+                // Handle the case where there's no cached data
+            }
+        } catch (e: Exception) {
+            Log.e("HomeFragment", "Error loading cached data", e)
+            // Handle the error, maybe show a message to the user
+        }
     }
 
 }

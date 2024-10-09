@@ -41,4 +41,5 @@
     <string name="btn_mapSetting">تحديد</string>
     <string name="map_setting">خريطه</string>
     <string name="btn_ChooseLocationOfTheAalrm">أختار</string>
+    <string name="mapAlarm">خريطه</string>
 </resources>
