@@ -33,10 +33,14 @@
 
     <fragment
         android:id="@+id/nav_alarm"
-        android:name="com.example.theweather.ui.slideshow.SlideshowFragment"
+        android:name="com.example.theweather.ui.alarm.view.AlarmFragment"
         android:label="@string/menu_alarm"
         android:fontFamily="@font/f1"
-        tools:layout="@layout/fragment_slideshow" />
+        tools:layout="@layout/fragment_alarm" >
+        <action
+            android:id="@+id/action_nav_alarm_to_mapsAlarmFragment"
+            app:destination="@id/mapsAlarmFragment" />
+    </fragment>
     <fragment
         android:id="@+id/nav_favourite"
         android:name="com.example.theweather.favourite.view.FavouriteFragment"
@@ -69,5 +73,14 @@
         <action
             android:id="@+id/action_settingMapFragment_to_nav_home"
             app:destination="@id/nav_home" />
+    </fragment>
+    <fragment
+        android:id="@+id/mapsAlarmFragment"
+        android:name="com.example.theweather.ui.alarm.view.MapsAlarmFragment"
+        android:label="fragment_maps_alarm"
+        tools:layout="@layout/fragment_maps_alarm" >
+        <action
+            android:id="@+id/action_mapsAlarmFragment_to_nav_alarm"
+            app:destination="@id/nav_alarm" />
     </fragment>
 </navigation>
