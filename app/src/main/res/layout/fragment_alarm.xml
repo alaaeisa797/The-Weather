@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#CD588B9A"
     tools:context=".ui.alarm.view.AlarmFragment">
 
     <androidx.recyclerview.widget.RecyclerView

@@ -75,7 +75,6 @@ class ReposatoryTest {
         var result = repo.getWitherOfTheDay(0.0,0.0,"en") .first()
 //then
         assertEquals(currentWeather , result)
-
     }
     @Test
     fun InsertFAvLocation_FavouriteLocationItem_trueOrFalse () = runBlocking {

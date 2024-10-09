@@ -47,8 +47,10 @@ class Setting : Fragment() {
         val language = sharedPreferences.getString(MyConstants.MY_LANGYAGE_API_KEY,"en")
         val unit = sharedPreferences.getString(MyConstants.MY_TEMP_UNIT,"Celsius")
         val windSpeed = sharedPreferences.getString(MyConstants.MY_WIND_SPEED,"Meter/Sec")
+        val notification = sharedPreferences.getString(MyConstants.MY_NOTIFICATION_CONDITION,"EnableSound")
         val locationWay = sharedPreferences.getString(MyConstants.MY_LOCATION_WAY,"GPS")
         val mapOrGps = SharedPrefToDetectdWayOfLocationing.getString("map||gps","gpsIsClicked")
+
         when(language)
         {
             "ar"-> binding.rbArabic.isChecked = true
@@ -64,6 +66,11 @@ class Setting : Fragment() {
         {
            "Meter/Sec" ->binding.rbMeterSec.isChecked = true
            "Mile/Hour" ->binding.rbMileHour.isChecked = true
+        }
+        when (notification)
+        {
+            "EnableSound"-> binding.rbEnableNotofication .isChecked = true
+                "DisableSound"->binding.rbDisableNotofication.isChecked=true
         }
 //        when(mapOrGps)
 //        {
@@ -153,6 +160,25 @@ class Setting : Fragment() {
             }
 
         }
+        binding.rgNotofications.setOnCheckedChangeListener{groub, id->
+
+            val NotoficationRadioButton: RadioButton = binding.root.findViewById(id) as RadioButton
+           when (NotoficationRadioButton.text)
+           {
+               "تعطيل","Disable"->{
+                 val x =  sharedPreferences.edit().putString(MyConstants.MY_NOTIFICATION_CONDITION, "DisableSound").apply()
+
+                   Log.d("TAG", "onViewCreated: fel rgNotofocation ek mafrod ykon  DisableSound ${x.toString()}" )
+                   restartApp()
+               }
+               else ->{
+                  val x=  sharedPreferences.edit().putString(MyConstants.MY_NOTIFICATION_CONDITION, "EnableSound").apply()
+                   Log.d("TAG", "onViewCreated: fel rgNotofocation ek mafrod ykon  EnableSound  ${x.toString()}" )
+                   restartApp()
+               }
+           }
+
+        }
     }
 
     override fun onDestroyView() {
@@ -166,7 +192,7 @@ class Setting : Fragment() {
             "en" -> "english"
             else -> "english"
         }
-        sharedPreferences.edit().putString(MyConstants.MY_LANGYAGE_APP_KEY,languageCode).apply()
+        sharedPreferences.edit().putString(MyConstants.MY_LANGYAGE_APP_KEYs,languageCode).apply()
         val appLocale: LocaleListCompat = LocaleListCompat.forLanguageTags(language)
         AppCompatDelegate.setApplicationLocales(appLocale)
     }

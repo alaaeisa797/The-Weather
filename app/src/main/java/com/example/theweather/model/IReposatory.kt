@@ -20,4 +20,9 @@ interface IReposatory {
     suspend fun deleteFromFavourie(favItem: FavouriteLocationItem): Int
 
     fun getAllFavouriteLocations(): Flow<List<FavouriteLocationItem>?>
+
+
+    fun getAllAlarms (): Flow<List<AlarmItem>>
+    suspend fun deleteAlarm (favItem : AlarmItem) : Int
+    suspend fun insertAlarm (favItem : AlarmItem) :Long
 }

@@ -47,6 +47,23 @@ class Reposatory (private val remoteDataSource: IRemoteDataSource , private val 
         return localDataSource.getAllFavouriteProduct()
     }
 
+////////////////////////////////////////////
+    /// alarm 
+
+   override suspend fun insertAlarm (alarmItem : AlarmItem) :Long
+    {
+        return localDataSource.insertAlert(alarmItem)
+    }
+
+  override suspend fun deleteAlarm (alarmItem : AlarmItem) : Int
+    {
+        return localDataSource.deleteAlert (alarmItem)
+    }
+  override fun getAllAlarms (): Flow<List<AlarmItem>>
+    {
+        return localDataSource.getAllAlarms()
+    }
+
 
 
 

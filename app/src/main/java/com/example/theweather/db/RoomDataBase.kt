@@ -12,6 +12,7 @@ abstract class RoomDataBase : RoomDatabase() {
 
     abstract fun getAllFavLoacations(): DAO
 
+
     companion object {
 
         private var instance: RoomDataBase? = null

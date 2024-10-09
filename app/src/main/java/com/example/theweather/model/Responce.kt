@@ -72,7 +72,7 @@ data class FavouriteLocationItem(
 data class  AlarmItem (
     @PrimaryKey(autoGenerate = true)
     var id:Int =0,
-    val address : String ,
-    val AlarmDate : String
+    val address : String,
+    var AlarmDate : String
 
 )

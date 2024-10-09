@@ -21,17 +21,17 @@ class FavouriteLocationsLocalDataSource (val dao : DAO) : IFavouriteLocationsLoc
         return  dao.getAllMyFavouriteLocations()
     }
 
-    suspend fun insertAlert (alertItem : AlarmItem) : Long
+    override suspend fun insertAlert (alertItem : AlarmItem) : Long
     {
         return dao.insertAlarm(alertItem)
     }
 
-    suspend fun deleteAlert (alertItem : AlarmItem) : Int
+    override suspend fun deleteAlert (alertItem : AlarmItem) : Int
     {
         return dao.deleteAlarm(alertItem)
     }
 
-    fun getAllAlarms () : Flow<List<AlarmItem>>{
+    override fun getAllAlarms () : Flow<List<AlarmItem>>{
 
         return dao.getAllAlarms()
     }

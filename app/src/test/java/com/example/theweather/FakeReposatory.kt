@@ -1,5 +1,6 @@
 package com.example.theweather
 
+import com.example.theweather.model.AlarmItem
 import com.example.theweather.model.CurrentDayWeatherResponce
 import com.example.theweather.model.FavouriteLocationItem
 import com.example.theweather.model.ForecastResponse
@@ -34,6 +35,18 @@ class FakeReposatory (private var fakeRemoteDataSource: FakeRemoteDataSource,
     }
 
     override fun getAllFavouriteLocations(): Flow<List<FavouriteLocationItem>?> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getAllAlarms(): Flow<List<AlarmItem>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun deleteAlarm(favItem: AlarmItem): Int {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun insertAlarm(favItem: AlarmItem): Long {
         TODO("Not yet implemented")
     }
 
